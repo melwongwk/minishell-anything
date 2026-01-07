@@ -118,6 +118,7 @@ t_token	*lexer(char *input)
 	t_token	*tokens;
 	int		i;
 	char	*word;
+	char	*var;
 	int		status;
 
 	tokens = NULL;
@@ -133,6 +134,18 @@ t_token	*lexer(char *input)
 		{
 			token_append(&tokens, token_new("|", PIPE, DEFAULT));
 			i++;
+			continue ;
+		}
+		if (is_redir(input[i]))
+		{
+			handle_redirection(&tokens, input, &i);
+			continue ;
+		}
+		if (input[i] == '$')
+		{
+			var = extract_var(input, &i);
+			token_append(&tokens, token_new(var, VAR, DEFAULT));
+			free(var);
 			continue ;
 		}
 		word = extract_word(input, &i, &status);
