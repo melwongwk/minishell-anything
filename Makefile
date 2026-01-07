@@ -13,10 +13,6 @@
 NAME			=	minishell
 CC				=	cc
 CFLAGS			=	-Wall -Wextra -Werror
-FFLAGS			=	-fsanitize=address -fsanitize=undefined \
-					-fno-sanitize-recover=all -fsanitize=float-divide-by-zero \
-					-fsanitize=float-cast-overflow -fno-sanitize=null \
-					-fno-sanitize=alignment
 LIBS			=	-lreadline
 SRC_DIR			=	sources
 INC_DIR			=	includes
@@ -39,7 +35,9 @@ INC				=	$(INC_DIR)/minishell.h
 SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/prompt.c \
 					$(SRC_DIR)/env.c \
-					$(SRC_DIR)/signal.c
+					$(SRC_DIR)/signal.c \
+					$(SRC_DIR)/lexer/token_utils.c \
+					$(SRC_DIR)/lexer/lexer.c
 
 OBJS			=	$(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 OBJS_DIR		=	objects
@@ -52,19 +50,15 @@ LIBFT			=	$(LIBFT_DIR)/libft.a
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS_DIR) $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
 	$(SILENT)$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
 	@echo "$(GREEN)[DONE] $(NAME) created.$(RESET)"
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
-$(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)
-	@echo "$(BLUE)[DONE] $(OBJS_DIR)/ created.$(RESET)"
-	@echo "$(CYAN)[CC] Compiling $(NAME) object files...$(RESET)"
-
-$(OBJS_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	$(SILENT)$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INC) -c $< -o $@
 
 clean:

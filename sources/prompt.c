@@ -17,7 +17,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-static void	free_args(char **args)
+/* static void	free_args(char **args)
 {
 	int	i;
 
@@ -30,12 +30,12 @@ static void	free_args(char **args)
 		i++;
 	}
 	free(args);
-}
+} */
 
 void	run_prompt(t_env *env)
 {
 	char	*line;
-	char	**argv;
+//	char	**argv;
 
 	(void)env;
 	while (1)
@@ -49,9 +49,13 @@ void	run_prompt(t_env *env)
 		if (*line)
 			add_history(line);
 //		printf("You typed: %s\n", line);
-		argv = ft_split_charset(line, " \t");
+		t_token *tokens;
+
+		tokens = lexer(line);
+		print_tokens(tokens);
+		free_tokens(tokens);
 		free(line);
-		if (ft_strcmp(argv[0], "exit") == 0)
+		/* if (ft_strcmp(argv[0], "exit") == 0)
 		{
 			printf("exit\n");
 			free_args(argv);
@@ -67,7 +71,7 @@ void	run_prompt(t_env *env)
 					printf("%s ", argv[i++]);
 				printf("\n");
 			}
-		}
-		free_args(argv);
+		} */
+//		free_args(argv);
 	}
 }

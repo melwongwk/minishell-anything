@@ -13,6 +13,85 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdbool.h>
+# include <sys/types.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft.h"
+
+typedef struct s_token
+{
+	char			*str;
+	char			*str_backup;
+	bool			var_exists;
+	int				type;
+	int				status;
+	bool			join;
+	struct s_token	*prev;
+	struct s_token	*next;
+}					t_token;
+
+typedef struct s_io_fds
+{
+	char	*infile;
+	char	*outfile;
+	char	*heredoc_delimiter;
+	bool	heredoc_quotes;
+	int		fd_in;
+	int		fd_out;
+	int		stdin_backup;
+	int		stdout_backup;
+}			t_io_fds;
+
+typedef struct s_command
+{
+	char				*command;
+	char				*path;
+	char				**args;
+	bool				pipe_output;
+	int					*pipe_fd;
+	t_io_fds			*io_fds;
+	struct s_command	*next;
+	struct s_command	*prev;
+}						t_command;
+
+typedef struct s_data
+{
+	bool		interactive;
+	t_token		*token;
+	char		*user_input;
+	char		**env;           /* note: this is char ** like in repo */
+	char		*working_dir;
+	char		*old_working_dir;
+	t_command	*cmd;
+	pid_t		pid;
+}				t_data;
+
+enum e_token_types
+{
+	SPACES = 1,
+	WORD,
+	VAR,
+	PIPE,
+	INPUT,
+	TRUNC,
+	HEREDOC,
+	APPEND,
+	END
+};
+
+enum e_quoting_status
+{
+	DEFAULT,
+	SQUOTE,
+	DQUOTE
+};
+
 typedef struct s_env
 {
 	char			*key;
@@ -20,11 +99,27 @@ typedef struct s_env
 	struct s_env	*next;	
 }					t_env;
 
-void	run_prompt(t_env *env);
-t_env	*init_env(char **envp);
-void	free_env(t_env *env);
-void	init_signals(void);
+void		run_prompt(t_env *env);
+t_env		*init_env(char **envp);
+void		free_env(t_env *env);
+void		init_signals(void);
 
-void	print_env(t_env *env);
+void		print_env(t_env *env);
+
+/* lexer */
+t_token		*token_new(const char *s, int type, int status);
+void		token_append(t_token **head, t_token *node);
+t_token		*tokenize_input(const char *input);
+void		free_tokens(t_token *tok);
+void		print_tokens(t_token *tok);
+t_token		*lexer(char *input);
+
+/* parser */
+t_command	*tokens_to_commands(t_token *tokens);
+void		free_commands(t_command *cmd);
+void		print_commands(t_command *cmd);
+
+/* env bridging */
+char		**env_list_to_array(t_env *env);
 
 #endif
