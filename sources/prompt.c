@@ -50,9 +50,13 @@ void	run_prompt(t_env *env)
 			add_history(line);
 //		printf("You typed: %s\n", line);
 		t_token *tokens;
+		t_command *cmds;
 
 		tokens = lexer(line);
 		print_tokens(tokens);
+		cmds = parse_commands(tokens);
+		expand_commands(cmds, env, 0);
+		print_commands(cmds);
 		free_tokens(tokens);
 		free(line);
 		/* if (ft_strcmp(argv[0], "exit") == 0)

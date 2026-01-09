@@ -15,8 +15,6 @@
 
 # include <stdbool.h>
 # include <sys/types.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
 # include <signal.h>
@@ -119,9 +117,13 @@ void		print_tokens(t_token *tok);
 t_token		*lexer(char *input);
 
 /* parser */
-t_command	*tokens_to_commands(t_token *tokens);
+t_command	*parse_commands(t_token *tokens);
+t_command	*cmd_new(void);
+void		handle_redir_token(t_command *cmd, t_token **tok);
 void		free_commands(t_command *cmd);
 void		print_commands(t_command *cmd);
+void		expand_commands(t_command *cmds, t_env *env, int last_status);
+char		*env_get(t_env *env, const char *key);
 
 /* env bridging */
 char		**env_list_to_array(t_env *env);

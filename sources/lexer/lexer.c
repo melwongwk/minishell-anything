@@ -14,11 +14,6 @@
 #include "libft.h"
 #include <stdlib.h>
 
-static int	is_space(char c)
-{
-	return (c == ' ' || c == '\t');
-}
-
 static int	unquoted_len(char *s, int i, int *end)
 {
 	int	len;
@@ -28,7 +23,7 @@ static int	unquoted_len(char *s, int i, int *end)
 	state = DEFAULT;
 	while (s[i])
 	{
-		if (state == DEFAULT && (is_space(s[i]) || s[i] == '|'))
+		if (state == DEFAULT && (ft_isspace(s[i]) || s[i] == '|'))
 			break ;
 		if (s[i] == '\'' && state == DEFAULT)
 			state = SQUOTE;
@@ -125,7 +120,7 @@ t_token	*lexer(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (is_space(input[i]))
+		if (ft_isspace(input[i]))
 		{
 			i++;
 			continue ;

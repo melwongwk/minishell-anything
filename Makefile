@@ -38,7 +38,11 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/signal.c \
 					$(SRC_DIR)/lexer/token_utils.c \
 					$(SRC_DIR)/lexer/lexer.c \
-					$(SRC_DIR)/lexer/lexer_utils.c
+					$(SRC_DIR)/lexer/lexer_utils.c \
+					$(SRC_DIR)/parser/parser_utils.c \
+					$(SRC_DIR)/parser/parser.c \
+					$(SRC_DIR)/parser/redirections.c \
+					$(SRC_DIR)/parser/expansion.c
 
 OBJS			=	$(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 OBJS_DIR		=	objects

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "minishell.h"
 
 /*
  * Create a new token. copies `s` into both str and str_backup.
