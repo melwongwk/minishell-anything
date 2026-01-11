@@ -14,14 +14,7 @@
 # define MINISHELL_H
 
 # include <stdbool.h>
-# include <sys/types.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
 # include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include "libft.h"
 
 typedef struct s_token
@@ -65,7 +58,7 @@ typedef struct s_data
 	bool		interactive;
 	t_token		*token;
 	char		*user_input;
-	char		**env;           /* note: this is char ** like in repo */
+	char		**env;
 	char		*working_dir;
 	char		*old_working_dir;
 	t_command	*cmd;
@@ -109,19 +102,28 @@ void		print_env(t_env *env);
 int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
+bool		check_syntax(t_token *token);
+void		handle_heredocs(t_command *cmds, t_env *env, int last_status);
+char		*expand_string(char *s, t_env *env, int last_status);
+void		free_commands(t_command *cmd);
 
 /* lexer */
 t_token		*token_new(const char *s, int type, int status);
 void		token_append(t_token **head, t_token *node);
-t_token		*tokenize_input(const char *input);
 void		free_tokens(t_token *tok);
 void		print_tokens(t_token *tok);
+void		join_tokens(t_token *tokens);
 t_token		*lexer(char *input);
 
 /* parser */
-t_command	*tokens_to_commands(t_token *tokens);
+t_command	*parse_commands(t_token *tokens);
+t_command	*cmd_new(void);
+void		handle_redir_token(t_command *cmd, t_token **tok);
 void		free_commands(t_command *cmd);
 void		print_commands(t_command *cmd);
+void		expand_commands(t_command *cmds, t_env *env, int last_status);
+char		*env_get(t_env *env, const char *key);
+void		expand_tokens(t_token *tokens, t_env *env, int last_status);
 
 /* env bridging */
 char		**env_list_to_array(t_env *env);

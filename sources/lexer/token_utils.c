@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "minishell.h"
 
 /*
  * Create a new token. copies `s` into both str and str_backup.
@@ -104,4 +104,41 @@ void	free_tokens(t_token *tok)
 	}
 }
 
+void	join_tokens(t_token *tokens)
+{
+	t_token	*cur;
+	t_token	*next;
+	char	*joined;
+	char	*left;
+	char	*right;
 
+	cur = tokens;
+	while (cur && cur->next)
+	{
+		if (cur->next->join)
+		{
+			next = cur->next;
+			if (cur->str)
+				left = cur->str;
+			else
+				left = "";
+			if (next->str)
+				right = next->str;
+			else
+				right = "";
+			joined = ft_strjoin(left, right);
+			free(cur->str);
+			cur->str = joined;
+
+			cur->next = next->next;
+			if (next->next)
+				next->next->prev = cur;
+
+			free(next->str);
+			free(next->str_backup);
+			free(next);
+			continue ;
+		}
+		cur = cur->next;
+	}
+}

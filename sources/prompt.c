@@ -17,27 +17,12 @@
 #include "minishell.h"
 #include "libft.h"
 
-/* static void	free_args(char **args)
-{
-	int	i;
-
-	if (!args)
-		return ;
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
-} */
-
 void	run_prompt(t_env *env)
 {
 	char	*line;
-//	char	**argv;
+	t_token *tokens;
+	t_command *cmds;
 
-	(void)env;
 	while (1)
 	{
 		line = readline("minishell:~$ ");
@@ -48,30 +33,21 @@ void	run_prompt(t_env *env)
 		}
 		if (*line)
 			add_history(line);
-//		printf("You typed: %s\n", line);
-		t_token *tokens;
-
 		tokens = lexer(line);
-		print_tokens(tokens);
+		if (!check_syntax(tokens))
+		{
+			printf("Syntax error\n");
+			free(line);
+			free_tokens(tokens);
+			continue ;
+		}
+		expand_tokens(tokens, env, 0);
+		join_tokens(tokens);
+		cmds = parse_commands(tokens);
+		handle_heredocs(cmds, env, 0);
+		print_commands(cmds);
+		free_commands(cmds);
 		free_tokens(tokens);
 		free(line);
-		/* if (ft_strcmp(argv[0], "exit") == 0)
-		{
-			printf("exit\n");
-			free_args(argv);
-			free_env(env);
-			exit(EXIT_SUCCESS);
-		}
-		else if (ft_strcmp(argv[0], "print") == 0)
-		{
-			if (argv && argv[0])
-			{
-				int i = 1;
-				while (argv[i])
-					printf("%s ", argv[i++]);
-				printf("\n");
-			}
-		} */
-//		free_args(argv);
 	}
 }

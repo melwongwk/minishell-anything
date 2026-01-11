@@ -10,148 +10,91 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <stdbool.h>
 #include "minishell.h"
 #include "libft.h"
-#include <stdlib.h>
 
-static int	is_space(char c)
+static char *extract_segment(char *s, int *i, int *status, bool *is_var)
 {
-	return (c == ' ' || c == '\t');
-}
+	int	start;
 
-static int	unquoted_len(char *s, int i, int *end)
-{
-	int	len;
-	int	state;
-
-	len = 0;
-	state = DEFAULT;
-	while (s[i])
+	*is_var = false;
+	if (s[*i] == '$')
 	{
-		if (state == DEFAULT && (is_space(s[i]) || s[i] == '|'))
-			break ;
-		if (s[i] == '\'' && state == DEFAULT)
-			state = SQUOTE;
-		else if (s[i] == '\'' && state == SQUOTE)
-			state = DEFAULT;
-		else if (s[i] == '"' && state == DEFAULT)
-			state = DQUOTE;
-		else if (s[i] == '"' && state == DQUOTE)
-			state = DEFAULT;
+		start = (*i)++;
+		if (s[*i] == '?')
+			(*i)++;
 		else
-			len++;
-		i++;
+			while (ft_isalnum(s[*i]) || s[*i] == '_')
+				(*i)++;
+		*status = DEFAULT;
+		*is_var = true;
+		return (ft_strndup(s + start, *i - start));
 	}
-	*end = i;
-	return (len);
-}
-
-static int	detect_pure_quote(char *s, int start, int end)
-{
-	int	i;
-
-	if (s[start] == '\'')
+	if (s[*i] == '\'' || s[*i] == '"')
 	{
-		i = start + 1;
-		while (i < end && s[i] != '\'')
-			i++;
-		if (i + 1 == end)
-			return (SQUOTE);
+		char q = s[*i];
+		*status = (q == '\'') ? SQUOTE : DQUOTE;
+		start = ++(*i);
+		while (s[*i] && s[*i] != q)
+			(*i)++;
+		char *out = ft_strndup(s + start, *i - start);
+		if (s[*i] == q)
+			(*i)++;
+		return (out);
 	}
-	if (s[start] == '"')
-	{
-		i = start + 1;
-		while (i < end && s[i] != '"')
-			i++;
-		if (i + 1 == end)
-			return (DQUOTE);
-	}
-	return (DEFAULT);
-}
-
-static void	fill_unquoted(char *s, int start, int end, char *dst)
-{
-	int	i;
-	int	j;
-	int	state;
-
-	i = start;
-	j = 0;
-	state = DEFAULT;
-	while (i < end)
-	{
-		if (s[i] == '\'' && state == DEFAULT)
-			state = SQUOTE;
-		else if (s[i] == '\'' && state == SQUOTE)
-			state = DEFAULT;
-		else if (s[i] == '"' && state == DEFAULT)
-			state = DQUOTE;
-		else if (s[i] == '"' && state == DQUOTE)
-			state = DEFAULT;
-		else
-			dst[j++] = s[i];
-		i++;
-	}
-	dst[j] = '\0';
-}
-
-static char	*extract_word(char *s, int *i, int *status)
-{
-	int		start;
-	int		end;
-	int		len;
-	char	*word;
-
 	start = *i;
-	len = unquoted_len(s, start, &end);
-	word = malloc(len + 1);
-	if (!word)
-		return (NULL);
-	fill_unquoted(s, start, end, word);
-	*status = detect_pure_quote(s, start, end);
-	*i = end;
-	return (word);
+	*status = DEFAULT;
+	while (s[*i] && !ft_isspace(s[*i]) && !is_redir(s[*i])
+		&& s[*i] != '|' && s[*i] != '$' && s[*i] != '\'' && s[*i] != '"')
+		(*i)++;
+	return (ft_strndup(s + start, *i - start));
 }
 
 t_token	*lexer(char *input)
 {
 	t_token	*tokens;
 	int		i;
-	char	*word;
-	char	*var;
+	bool	had_space;
 	int		status;
+	bool	is_var;
+	char	*seg;
 
 	tokens = NULL;
 	i = 0;
 	while (input[i])
 	{
-		if (is_space(input[i]))
+		had_space = false;
+		while (ft_isspace(input[i]))
 		{
+			had_space = true;
 			i++;
-			continue ;
 		}
+		if (!input[i])
+			break;
 		if (input[i] == '|')
 		{
 			token_append(&tokens, token_new("|", PIPE, DEFAULT));
 			i++;
-			continue ;
+			continue;
 		}
 		if (is_redir(input[i]))
 		{
 			handle_redirection(&tokens, input, &i);
-			continue ;
+			continue;
 		}
-		if (input[i] == '$')
+		seg = extract_segment(input, &i, &status, &is_var);
+		if (seg && *seg)
 		{
-			var = extract_var(input, &i);
-			token_append(&tokens, token_new(var, VAR, DEFAULT));
-			free(var);
-			continue ;
+			t_token *new = token_new(seg,
+				is_var ? VAR : WORD,
+				status);
+			if (!had_space)
+				new->join = true;
+			token_append(&tokens, new);
 		}
-		word = extract_word(input, &i, &status);
-		if (*word)
-			token_append(&tokens, token_new(word, WORD, status));
-		free(word);
+		free(seg);
 	}
 	return (tokens);
 }
