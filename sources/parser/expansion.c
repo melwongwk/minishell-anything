@@ -23,6 +23,8 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	char	*suffix;
 	char	*tmp;
 	char	*final;
+	int		start;
+	int		len;
 
 	i = 0;
 	while (s[i] && s[i] != '$')
@@ -36,8 +38,8 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	}
 	else
 	{
-		int start = i + 1;
-		int len = 0;
+		start = i + 1;
+		len = 0;
 		while (ft_isalnum(s[start + len]) || s[start + len] == '_')
 			len++;
 		name = ft_strndup(s + i, len + 1);
@@ -107,12 +109,6 @@ void	expand_commands(t_command *cmds, t_env *env, int last_status)
 	}
 }
 
-/*
- * Expand tokens in-place. Uses your expand_string() helper.
- * - If token->status == SQUOTE => skip expansion (leave token->str)
- * - If token->type == VAR => expand and turn into WORD (so parser treats as word)
- * - Set token->var_exists if expansion produced non-empty text when original had a $
- */
 void	expand_tokens(t_token *tokens, t_env *env, int last_status)
 {
 	t_token	*t;

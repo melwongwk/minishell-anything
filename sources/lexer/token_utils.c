@@ -14,11 +14,6 @@
 #include <stdlib.h>
 #include "minishell.h"
 
-/*
- * Create a new token. copies `s` into both str and str_backup.
- * `type` should be one of the enum token types from the header.
- * `status` should be DEFAULT / SQUOTE / DQUOTE as appropriate.
- */
 t_token	*token_new(const char *s, int type, int status)
 {
 	t_token	*t;
@@ -45,10 +40,6 @@ t_token	*token_new(const char *s, int type, int status)
 	return (t);
 }
 
-/*
- * Append `node` to the end of the token list pointed to by *head.
- * If *head is NULL the node becomes the first element.
- */
 void	token_append(t_token **head, t_token *node)
 {
 	t_token	*cur;
@@ -67,10 +58,6 @@ void	token_append(t_token **head, t_token *node)
 	node->prev = cur;
 }
 
-/*
- * Debug print for tokens. Shows type, status, join and var flag,
- * and the token string (or "(null)" if missing).
- */
 void	print_tokens(t_token *tok)
 {
 	while (tok)
@@ -85,9 +72,6 @@ void	print_tokens(t_token *tok)
 	}
 }
 
-/*
- * Free all tokens (str and str_backup included).
- */
 void	free_tokens(t_token *tok)
 {
 	t_token	*tmp;

@@ -17,7 +17,9 @@
 
 static char *extract_segment(char *s, int *i, int *status, bool *is_var)
 {
-	int	start;
+	int		start;
+	char	q;
+	char	*out;
 
 	*is_var = false;
 	if (s[*i] == '$')
@@ -34,12 +36,15 @@ static char *extract_segment(char *s, int *i, int *status, bool *is_var)
 	}
 	if (s[*i] == '\'' || s[*i] == '"')
 	{
-		char q = s[*i];
-		*status = (q == '\'') ? SQUOTE : DQUOTE;
+		q = s[*i];
+		if (q == '\'')
+			*status = SQUOTE;
+		else
+			*status = DQUOTE;
 		start = ++(*i);
 		while (s[*i] && s[*i] != q)
 			(*i)++;
-		char *out = ft_strndup(s + start, *i - start);
+		out = ft_strndup(s + start, *i - start);
 		if (s[*i] == q)
 			(*i)++;
 		return (out);
@@ -60,6 +65,7 @@ t_token	*lexer(char *input)
 	int		status;
 	bool	is_var;
 	char	*seg;
+	t_token	*new;
 
 	tokens = NULL;
 	i = 0;
@@ -87,9 +93,10 @@ t_token	*lexer(char *input)
 		seg = extract_segment(input, &i, &status, &is_var);
 		if (seg && *seg)
 		{
-			t_token *new = token_new(seg,
-				is_var ? VAR : WORD,
-				status);
+			if (is_var)
+				new = token_new(seg, VAR, status);
+			else
+				new = token_new(seg, WORD, status);
 			if (!had_space)
 				new->join = true;
 			token_append(&tokens, new);
