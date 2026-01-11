@@ -14,31 +14,40 @@
 #include "minishell.h"
 #include "libft.h"
 
-static t_token	*next_word(t_token *tok)
-{
-	while (tok && tok->type != WORD)
-		tok = tok->next;
-	return (tok);
-}
-
 void	handle_redir_token(t_command *cmd, t_token **tok)
 {
-	t_token	*next;
+	t_token	*cur;
+	t_token	*delim;
+	char	*joined;
+	char	*tmp;
 
-	next = (*tok)->next;
-	next = next_word(next);
-	if (!next)
+	cur = (*tok)->next;
+	while (cur && cur->type != WORD && cur->type != VAR)
+		cur = cur->next;
+	if (!cur)
+	{
+		*tok = (*tok)->next;
 		return ;
-
+	}
+	delim = cur;
+	joined = ft_strdup(cur->str);
+	cur = cur->next;
+	while (cur && cur->join)
+	{
+		tmp = joined;
+		joined = ft_strjoin(tmp, cur->str);
+		free(tmp);
+		cur = cur->next;
+	}
 	if ((*tok)->type == INPUT)
-		cmd->io_fds->infile = ft_strdup(next->str);
+		cmd->io_fds->infile = joined;
 	else if ((*tok)->type == TRUNC || (*tok)->type == APPEND)
-		cmd->io_fds->outfile = ft_strdup(next->str);
+		cmd->io_fds->outfile = joined;
 	else if ((*tok)->type == HEREDOC)
 	{
-		cmd->io_fds->heredoc_delimiter = ft_strdup(next->str);
-		cmd->io_fds->heredoc_quotes = (next->status != DEFAULT);
+		cmd->io_fds->heredoc_delimiter = joined;
+		cmd->io_fds->heredoc_quotes = (delim->status != DEFAULT);
 	}
-	*tok = next->next;
+	*tok = cur;
 }
 

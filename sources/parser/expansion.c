@@ -110,3 +110,40 @@ void	expand_commands(t_command *cmds, t_env *env, int last_status)
 		cmds = cmds->next;
 	}
 }
+
+/*
+ * Expand tokens in-place. Uses your expand_string() helper.
+ * - If token->status == SQUOTE => skip expansion (leave token->str)
+ * - If token->type == VAR => expand and turn into WORD (so parser treats as word)
+ * - Set token->var_exists if expansion produced non-empty text when original had a $
+ */
+void	expand_tokens(t_token *tokens, t_env *env, int last_status)
+{
+	t_token	*t;
+	char	*expanded;
+
+	t = tokens;
+	while (t)
+	{
+		if ((t->type == WORD || t->type == VAR) && t->str)
+		{
+			if (t->status == SQUOTE)
+			{
+			}
+			else
+			{
+				expanded = expand_string(t->str, env, last_status);
+				free(t->str);
+				t->str = expanded;
+				if (ft_strchr(t->str_backup, '$'))
+					t->var_exists = (t->str && *t->str);
+			}
+			if (t->type == VAR)
+			{
+				t->type = WORD;
+				t->status = DEFAULT;
+			}
+		}
+		t = t->next;
+	}
+}

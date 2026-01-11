@@ -104,4 +104,34 @@ void	free_tokens(t_token *tok)
 	}
 }
 
+void	join_tokens(t_token *tokens)
+{
+	t_token	*cur;
+	t_token	*next;
+	char	*joined;
 
+	cur = tokens;
+	while (cur && cur->next)
+	{
+		if (cur->next->join)
+		{
+			next = cur->next;
+			joined = ft_strjoin(
+				cur->str ? cur->str : "",
+				next->str ? next->str : ""
+			);
+			free(cur->str);
+			cur->str = joined;
+
+			cur->next = next->next;
+			if (next->next)
+				next->next->prev = cur;
+
+			free(next->str);
+			free(next->str_backup);
+			free(next);
+			continue ;
+		}
+		cur = cur->next;
+	}
+}
