@@ -25,6 +25,7 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	char	*final;
 	int		start;
 	int		len;
+	bool	should_free_value;
 
 	i = 0;
 	while (s[i] && s[i] != '$')
@@ -34,6 +35,7 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	if (s[i + 1] == '?')
 	{
 		value = ft_itoa(last_status);
+		should_free_value = true;
 		name = ft_strdup("$?");
 	}
 	else
@@ -55,6 +57,8 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	free(suffix);
 	free(tmp);
 	free(name);
+	if (should_free_value)
+		free(value);
 	return (final);
 }
 
@@ -75,28 +79,41 @@ char	*expand_string(char *s, t_env *env, int last_status)
 
 void	expand_command(t_command *cmd, t_env *env, int last_status)
 {
-	int	i;
+	int		i;
+	char	*old_arg;
 
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
+		old_arg = cmd->args[i];
 		cmd->args[i] = expand_string(cmd->args[i], env, last_status);
+		free(old_arg);
 		i++;
 	}
 }
 
 void	expand_redirections(t_command *cmd, t_env *env, int last_status)
 {
+	char	*old;
+
 	if (cmd->io_fds->infile)
-		cmd->io_fds->infile =
-			expand_string(cmd->io_fds->infile, env, last_status);
+	{
+		old = cmd->io_fds->infile;
+		cmd->io_fds->infile = expand_string(old, env, last_status);
+		free(old);
+	}
 	if (cmd->io_fds->outfile)
-		cmd->io_fds->outfile =
-			expand_string(cmd->io_fds->outfile, env, last_status);
-	if (cmd->io_fds->heredoc_delimiter
-		&& !cmd->io_fds->heredoc_quotes)
-		cmd->io_fds->heredoc_delimiter =
-			expand_string(cmd->io_fds->heredoc_delimiter, env, last_status);
+	{
+		old = cmd->io_fds->outfile;
+		cmd->io_fds->outfile = expand_string(old, env, last_status);
+		free(old);
+	}
+	if (cmd->io_fds->heredoc_delimiter && !cmd->io_fds->heredoc_quotes)
+	{
+		old = cmd->io_fds->heredoc_delimiter;
+		cmd->io_fds->heredoc_delimiter = expand_string(old, env, last_status);
+		free(old);
+	}
 }
 
 void	expand_commands(t_command *cmds, t_env *env, int last_status)
