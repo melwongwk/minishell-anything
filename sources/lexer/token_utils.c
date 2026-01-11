@@ -109,6 +109,8 @@ void	join_tokens(t_token *tokens)
 	t_token	*cur;
 	t_token	*next;
 	char	*joined;
+	char	*left;
+	char	*right;
 
 	cur = tokens;
 	while (cur && cur->next)
@@ -116,10 +118,15 @@ void	join_tokens(t_token *tokens)
 		if (cur->next->join)
 		{
 			next = cur->next;
-			joined = ft_strjoin(
-				cur->str ? cur->str : "",
-				next->str ? next->str : ""
-			);
+			if (cur->str)
+				left = cur->str;
+			else
+				left = "";
+			if (next->str)
+				right = next->str;
+			else
+				right = "";
+			joined = ft_strjoin(left, right);
 			free(cur->str);
 			cur->str = joined;
 

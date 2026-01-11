@@ -102,11 +102,14 @@ void		print_env(t_env *env);
 int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
+bool		check_syntax(t_token *token);
+void		handle_heredocs(t_command *cmds, t_env *env, int last_status);
+char		*expand_string(char *s, t_env *env, int last_status);
+void		free_commands(t_command *cmd);
 
 /* lexer */
 t_token		*token_new(const char *s, int type, int status);
 void		token_append(t_token **head, t_token *node);
-t_token		*tokenize_input(const char *input);
 void		free_tokens(t_token *tok);
 void		print_tokens(t_token *tok);
 void		join_tokens(t_token *tokens);

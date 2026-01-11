@@ -36,6 +36,9 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/prompt.c \
 					$(SRC_DIR)/env.c \
 					$(SRC_DIR)/signal.c \
+					$(SRC_DIR)/validation.c \
+					$(SRC_DIR)/heredocs.c \
+					$(SRC_DIR)/cleanup.c \
 					$(SRC_DIR)/lexer/token_utils.c \
 					$(SRC_DIR)/lexer/lexer.c \
 					$(SRC_DIR)/lexer/lexer_utils.c \

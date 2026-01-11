@@ -23,7 +23,6 @@ void	run_prompt(t_env *env)
 	t_token *tokens;
 	t_command *cmds;
 
-	(void)env;
 	while (1)
 	{
 		line = readline("minishell:~$ ");
@@ -35,11 +34,20 @@ void	run_prompt(t_env *env)
 		if (*line)
 			add_history(line);
 		tokens = lexer(line);
+		if (!check_syntax(tokens))
+		{
+			printf("Syntax error\n");
+			free(line);
+			free_tokens(tokens);
+			continue ;
+		}
 		expand_tokens(tokens, env, 0);
 		join_tokens(tokens);
-		print_tokens(tokens);
 		cmds = parse_commands(tokens);
+		handle_heredocs(cmds, env, 0);
 		print_commands(cmds);
+		free_commands(cmds);
 		free_tokens(tokens);
+		free(line);
 	}
 }

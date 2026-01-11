@@ -22,13 +22,13 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 	char	*prefix;
 	char	*suffix;
 	char	*tmp;
+	char	*final;
 
 	i = 0;
 	while (s[i] && s[i] != '$')
 		i++;
 	if (!s[i])
 		return (ft_strdup(s));
-
 	if (s[i + 1] == '?')
 	{
 		value = ft_itoa(last_status);
@@ -43,19 +43,17 @@ static char	*expand_one_var(char *s, t_env *env, int last_status)
 		name = ft_strndup(s + i, len + 1);
 		value = env_get(env, name + 1);
 	}
-
 	if (!value)
 		value = "";
-
 	prefix = ft_strndup(s, i);
 	suffix = ft_strdup(s + i + ft_strlen(name));
-
 	tmp = ft_strjoin(prefix, value);
 	free(prefix);
-	tmp = ft_strjoin_free(tmp, suffix, 1);
-
+	final = ft_strjoin(tmp, suffix);
+	free(suffix);
+	free(tmp);
 	free(name);
-	return (tmp);
+	return (final);
 }
 
 char	*expand_string(char *s, t_env *env, int last_status)
@@ -90,11 +88,9 @@ void	expand_redirections(t_command *cmd, t_env *env, int last_status)
 	if (cmd->io_fds->infile)
 		cmd->io_fds->infile =
 			expand_string(cmd->io_fds->infile, env, last_status);
-
 	if (cmd->io_fds->outfile)
 		cmd->io_fds->outfile =
 			expand_string(cmd->io_fds->outfile, env, last_status);
-
 	if (cmd->io_fds->heredoc_delimiter
 		&& !cmd->io_fds->heredoc_quotes)
 		cmd->io_fds->heredoc_delimiter =

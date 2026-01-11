@@ -16,11 +16,24 @@
 
 static int	count_args(t_token *tok)
 {
-	int	count = 0;
-
+	int	count;
+	
+	count = 0;
 	while (tok && tok->type != PIPE)
 	{
-		if (tok->type == WORD || tok->type == VAR)
+		if (tok->type == INPUT || tok->type == TRUNC
+			|| tok->type == APPEND || tok->type == HEREDOC)
+		{
+			tok = tok->next;
+			while (tok && tok->join)
+				tok = tok->next;
+			if (tok)
+				tok = tok->next;
+			else
+				tok = NULL;
+			continue;
+		}
+		if (tok->type == WORD)
 			count++;
 		tok = tok->next;
 	}
@@ -44,9 +57,9 @@ static void	fill_args(t_command *cmd, t_token **tok)
 			|| tmp->type == APPEND || tmp->type == HEREDOC)
 		{
 			handle_redir_token(cmd, &tmp);
-			continue ;
+			continue;
 		}
-		if (tmp->type == WORD || tmp->type == VAR)
+		if (tmp->type == WORD)
 		{
 			cmd->args[i++] = ft_strdup(tmp->str);
 			if (!cmd->command)

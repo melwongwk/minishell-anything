@@ -15,93 +15,86 @@
 #include "minishell.h"
 #include "libft.h"
 
-static char *extract_segment(char *s, int *i, int *status)
+static char *extract_segment(char *s, int *i, int *status, bool *is_var)
 {
-    int start = *i;
+	int	start;
 
-    if (s[*i] == '\'' || s[*i] == '"')
-    {
-        char quote = s[*i];
-        *status = (quote == '\'') ? SQUOTE : DQUOTE;
-        (*i)++;
-        start = *i;
-        while (s[*i] && s[*i] != quote)
-            (*i)++;
-
-        char *seg = ft_strndup(s + start, *i - start);
-        if (s[*i] == quote)
-            (*i)++;
-        return seg;
-    }
-    *status = DEFAULT;
-    while (s[*i]
-        && !ft_isspace(s[*i])
-        && s[*i] != '|'
-        && !is_redir(s[*i])
-        && s[*i] != '\''
-        && s[*i] != '"'
-        && s[*i] != '$')
-        (*i)++;
-    return ft_strndup(s + start, *i - start);
+	*is_var = false;
+	if (s[*i] == '$')
+	{
+		start = (*i)++;
+		if (s[*i] == '?')
+			(*i)++;
+		else
+			while (ft_isalnum(s[*i]) || s[*i] == '_')
+				(*i)++;
+		*status = DEFAULT;
+		*is_var = true;
+		return (ft_strndup(s + start, *i - start));
+	}
+	if (s[*i] == '\'' || s[*i] == '"')
+	{
+		char q = s[*i];
+		*status = (q == '\'') ? SQUOTE : DQUOTE;
+		start = ++(*i);
+		while (s[*i] && s[*i] != q)
+			(*i)++;
+		char *out = ft_strndup(s + start, *i - start);
+		if (s[*i] == q)
+			(*i)++;
+		return (out);
+	}
+	start = *i;
+	*status = DEFAULT;
+	while (s[*i] && !ft_isspace(s[*i]) && !is_redir(s[*i])
+		&& s[*i] != '|' && s[*i] != '$' && s[*i] != '\'' && s[*i] != '"')
+		(*i)++;
+	return (ft_strndup(s + start, *i - start));
 }
 
 t_token	*lexer(char *input)
 {
 	t_token	*tokens;
 	int		i;
-	char	*word;
-	char	*var;
+	bool	had_space;
 	int		status;
-	int		start;
-	t_token	*new;
-	bool	prev_was_word;
+	bool	is_var;
+	char	*seg;
 
 	tokens = NULL;
 	i = 0;
-	prev_was_word = false;
 	while (input[i])
 	{
-		if (ft_isspace(input[i]))
+		had_space = false;
+		while (ft_isspace(input[i]))
 		{
+			had_space = true;
 			i++;
-			continue ;
 		}
+		if (!input[i])
+			break;
 		if (input[i] == '|')
 		{
 			token_append(&tokens, token_new("|", PIPE, DEFAULT));
 			i++;
-			continue ;
+			continue;
 		}
 		if (is_redir(input[i]))
 		{
 			handle_redirection(&tokens, input, &i);
-			continue ;
+			continue;
 		}
-		if (input[i] == '$')
+		seg = extract_segment(input, &i, &status, &is_var);
+		if (seg && *seg)
 		{
-			var = extract_var(input, &i);
-			new = token_new(var, VAR, DEFAULT);
-			if (prev_was_word)
-				new->join = 1;
+			t_token *new = token_new(seg,
+				is_var ? VAR : WORD,
+				status);
+			if (!had_space)
+				new->join = true;
 			token_append(&tokens, new);
-			prev_was_word = true;
-			free(var);
-			continue ;
 		}
-		else
-		{
-			start = i;
-			word = extract_segment(input, &i, &status);
-			if (*word)
-			{
-				new = token_new(word, WORD, status);
-				if (tokens && start > 0 && !ft_isspace(input[start - 1]))
-					new->join = 1;
-				token_append(&tokens, new);
-				prev_was_word = true;
-			}
-			free(word);
-		}
+		free(seg);
 	}
 	return (tokens);
 }
