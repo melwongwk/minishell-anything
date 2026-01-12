@@ -39,9 +39,11 @@ void prepare_heredoc(t_command *cmd, t_env *env, int last_status)
 				break ;
 			if (!cmd->io_fds->heredoc_quotes)
 				line = expand_string(line, env, last_status);
-
-			write(fd[1], line, ft_strlen(line));
-			write(fd[1], "\n", 1);
+			if (line)
+			{
+				write(fd[1], line, ft_strlen(line));
+				write(fd[1], "\n", 1);
+			}
 			free(line);
 		}
 		close(fd[1]);
