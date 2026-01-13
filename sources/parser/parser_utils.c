@@ -25,13 +25,20 @@ t_command	*cmd_new(void)
 	return (cmd);
 }
 
-char	*env_get(t_env *env, const char *key)
+char	*env_get(char **envp, const char *key)
 {
-	while (env)
+	size_t	key_len;
+	int		i;
+
+	if (!envp || !key)
+		return (NULL);
+	key_len = ft_strlen(key);
+	i = 0;
+	while (envp[i])
 	{
-		if (!ft_strcmp(env->key, key))
-			return (env->value);
-		env = env->next;
+		if (!ft_strncmp(envp[i], key, key_len) && envp[i][key_len] == '=')
+			return (envp[i] + key_len + 1);
+		i++;
 	}
 	return (NULL);
 }

@@ -19,10 +19,12 @@
 
 void	run_prompt(t_env *env)
 {
-	char	*line;
-	t_token *tokens;
-	t_command *cmds;
+	char		*line;
+	t_data		data;
 
+	ft_bzero(&data, sizeof(t_data));
+	data.env = env_list_to_array(env);
+	data.interactive = true;
 	while (1)
 	{
 		line = readline("minishell:~$ ");
@@ -33,21 +35,23 @@ void	run_prompt(t_env *env)
 		}
 		if (*line)
 			add_history(line);
-		tokens = lexer(line);
-		if (!check_syntax(tokens))
+		data.user_input = line;
+		data.token = lexer(line);
+		if (!check_syntax(data.token))
 		{
 			printf("Syntax error\n");
 			free(line);
-			free_tokens(tokens);
+			free_tokens(data.token);
 			continue ;
 		}
-		expand_tokens(tokens, env, 0);
-		join_tokens(tokens);
-		cmds = parse_commands(tokens);
-		handle_heredocs(cmds, env, 0);
-		print_commands(cmds);
-		free_commands(cmds);
-		free_tokens(tokens);
+		expand_tokens(data.token, data.env, 0);
+		join_tokens(data.token);
+		data.cmd = parse_commands(data.token);
+		handle_heredocs(data.cmd, data.env, 0);
+		print_commands(data.cmd);
+		free_commands(data.cmd);
+		free_tokens(data.token);
 		free(line);
 	}
+	free_split(data.env);
 }

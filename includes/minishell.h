@@ -36,6 +36,7 @@ typedef struct s_io_fds
 	char	*heredoc_delimiter;
 	bool	heredoc_quotes;
 	int		fd_in;
+	int		heredoc_fd;
 	int		fd_out;
 	int		stdin_backup;
 	int		stdout_backup;
@@ -97,14 +98,14 @@ t_env		*init_env(char **envp);
 void		free_env(t_env *env);
 void		init_signals(void);
 
-void		print_env(t_env *env);
+void		free_split(char **split);
 
 int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
-void		handle_heredocs(t_command *cmds, t_env *env, int last_status);
-char		*expand_string(char *s, t_env *env, int last_status);
+void		handle_heredocs(t_command *cmds, char **envp, int last_status);
+char		*expand_string(char *s, char **envp, int last_status);
 void		free_commands(t_command *cmd);
 
 /* lexer */
@@ -121,9 +122,9 @@ t_command	*cmd_new(void);
 void		handle_redir_token(t_command *cmd, t_token **tok);
 void		free_commands(t_command *cmd);
 void		print_commands(t_command *cmd);
-void		expand_commands(t_command *cmds, t_env *env, int last_status);
-char		*env_get(t_env *env, const char *key);
-void		expand_tokens(t_token *tokens, t_env *env, int last_status);
+void		expand_commands(t_command *cmds, char **envp, int last_status);
+char		*env_get(char **envp, const char *key);
+void		expand_tokens(t_token *tokens, char **envp, int last_status);
 
 /* env bridging */
 char		**env_list_to_array(t_env *env);

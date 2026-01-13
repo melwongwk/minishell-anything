@@ -81,14 +81,42 @@ void	free_env(t_env *env)
 	}
 }
 
-void	print_env(t_env *env)
+static int	env_count(t_env *env)
 {
+	int	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+char	**env_list_to_array(t_env *env)
+{
+	char	**envp;
+	char	*temp;
+	int		i;
+
+	envp = ft_calloc(env_count(env) + 1, sizeof(char *));
+	if (!env)
+		return (NULL);
+	i = 0;
 	while (env)
 	{
 		if (env->value)
-			ft_printf("%s=%s\n", env->key, env->value);
+		{
+			temp = ft_strjoin(env->key, "=");
+			envp[i] = ft_strjoin(temp, env->value);
+			free(temp);
+		}
 		else
-			ft_printf("%s\n", env->key);
+			envp[i] = ft_strdup(env->key);
+		i++;
 		env = env->next;
 	}
+	envp[i] = NULL;
+	return (envp);
 }

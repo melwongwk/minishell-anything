@@ -18,7 +18,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-void prepare_heredoc(t_command *cmd, t_env *env, int last_status)
+void prepare_heredoc(t_command *cmd, char **envp, int last_status)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -38,7 +38,7 @@ void prepare_heredoc(t_command *cmd, t_env *env, int last_status)
 			if (!line || !ft_strcmp(line, cmd->io_fds->heredoc_delimiter))
 				break ;
 			if (!cmd->io_fds->heredoc_quotes)
-				line = expand_string(line, env, last_status);
+				line = expand_string(line, envp, last_status);
 			if (line)
 			{
 				write(fd[1], line, ft_strlen(line));
@@ -59,12 +59,12 @@ void prepare_heredoc(t_command *cmd, t_env *env, int last_status)
 	}
 }
 
-void	handle_heredocs(t_command *cmds, t_env *env, int last_status)
+void	handle_heredocs(t_command *cmds, char **envp, int last_status)
 {
 	while (cmds)
 	{
 		if (cmds->io_fds->heredoc_delimiter)
-			prepare_heredoc(cmds, env, last_status);
+			prepare_heredoc(cmds, envp, last_status);
 		cmds = cmds->next;
 	}
 }
