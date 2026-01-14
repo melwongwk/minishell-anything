@@ -3,15 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 08:14:32 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/07 08:14:32 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 12:58:18 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "minishell.h"
 
 t_token	*token_new(const char *s, int type, int status)
@@ -67,7 +65,7 @@ void	print_tokens(t_token *tok)
 			tok->status,
 			(int)tok->join,
 			(int)tok->var_exists,
-			tok->str ? tok->str : "(null)");
+			(tok->str ? tok->str : "(null)"));
 		tok = tok->next;
 	}
 }
@@ -113,11 +111,9 @@ void	join_tokens(t_token *tokens)
 			joined = ft_strjoin(left, right);
 			free(cur->str);
 			cur->str = joined;
-
 			cur->next = next->next;
 			if (next->next)
 				next->next->prev = cur;
-
 			free(next->str);
 			free(next->str_backup);
 			free(next);

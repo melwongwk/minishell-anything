@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 07:13:45 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/09 07:13:59 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 13:00:47 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "minishell.h"
-#include "libft.h"
 
 static char	*expand_one_var(char *s, char **envp, int last_status)
 {
@@ -81,7 +79,8 @@ char	*expand_string(char *s, char **envp, int last_status)
 /*
  * Split an unquoted token on whitespace into multiple tokens.
  * Inserts new tokens into the linked list after the current token.
- * Does NOT modify the current token; caller should skip already-processed tokens.
+ * Does NOT modify the current token;
+ * caller should skip already-processed tokens.
  */
 static void	split_token_on_whitespace(t_token *token)
 {

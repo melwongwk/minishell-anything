@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:44 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 16:31:19 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 12:44:29 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static int	get_children(t_data *data)
 static	void	create_children_helper(t_data *data, t_command *cmd, int in)
 {
 	close_unused_pipe_fds(data, cmd);
-	if (cmd != data->cmd)
 	if (cmd != data->cmd && in >= 0)
 	{
 		dup2(in, STDIN_FILENO);
@@ -61,7 +60,7 @@ static	int	create_children(t_data *data)
 {
 	t_command	*cmd;
 	int			in;
-	
+
 	in = -1;
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)

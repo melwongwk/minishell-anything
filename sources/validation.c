@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 13:36:25 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/11 13:36:27 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 12:57:50 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
 #include "minishell.h"
 
 bool	check_syntax(t_token *token)

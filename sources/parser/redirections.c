@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 06:55:33 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/09 06:55:33 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 13:00:26 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "minishell.h"
-#include "libft.h"
 
 void	handle_redir_token(t_command *cmd, t_token **tok)
 {
@@ -50,4 +48,3 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 	}
 	*tok = cur;
 }
-

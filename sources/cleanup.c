@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 07:03:12 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/12 07:03:12 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 12:59:52 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "minishell.h"
 
 void	free_commands(t_command *cmd)

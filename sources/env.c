@@ -3,17 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:07:54 by melwong           #+#    #+#             */
-/*   Updated: 2025/10/07 11:12:09 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 12:59:47 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "libft.h"
 #include "minishell.h"
 
 static t_env	*env_new(const char *entry)

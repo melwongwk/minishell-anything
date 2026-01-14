@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 22:49:42 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/08 22:49:42 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 13:00:40 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "minishell.h"
-#include "libft.h"
 
 t_command	*cmd_new(void)
 {

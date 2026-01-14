@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 21:06:13 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/07 21:06:13 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 13:00:56 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include "minishell.h"
-#include "libft.h"
 
-static char *extract_segment(char *s, int *i, int *status, bool *is_var)
+static char	*extract_segment(char *s, int *i, int *status, bool *is_var)
 {
 	int		start;
 	char	q;
@@ -78,17 +75,17 @@ t_token	*lexer(char *input)
 			i++;
 		}
 		if (!input[i])
-			break;
+			break ;
 		if (input[i] == '|')
 		{
 			token_append(&tokens, token_new("|", PIPE, DEFAULT));
 			i++;
-			continue;
+			continue ;
 		}
 		if (is_redir(input[i]))
 		{
 			handle_redirection(&tokens, input, &i);
-			continue;
+			continue ;
 		}
 		seg = extract_segment(input, &i, &status, &is_var);
 		if (seg && *seg)

@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 22:20:59 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/11 22:20:59 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/14 12:59:31 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 #include "minishell.h"
-#include "libft.h"
 
-void prepare_heredoc(t_command *cmd, char **envp, int last_status)
+void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 {
 	int		fd[2];
 	pid_t	pid;
