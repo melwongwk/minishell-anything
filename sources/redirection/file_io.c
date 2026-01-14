@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 16:05:30 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:58:40 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	restore_io(t_io_fds *io)
 		return (ret);
 	if (io->stdin_backup != -1)
 	{
-			if (dup2(io->stdin_backup, STDIN_FILENO) == -1)
-				ret = errcmd_msg("dup2", "restore stdin", strerror(errno), false);
+		if (dup2(io->stdin_backup, STDIN_FILENO) == -1)
+			ret = errcmd_msg("dup2", "restore stdin", strerror(errno), false);
 		close(io->stdin_backup);
 		io->stdin_backup = -1;
 	}

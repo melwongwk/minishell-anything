@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 13:56:09 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:00:23 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,15 @@ static int	ft_atoi_long(const char *str, bool *error)
 static int	get_exit_code(t_data *data, char *arg, bool *error)
 {
 	unsigned long long	i;
+	char				*exit_str;
 
 	if (!arg)
-		return (data->g_last_exit_code);
+	{
+		exit_str = get_env_var_value(data->env, "?");
+		if (exit_str)
+			return (ft_atoi(exit_str));
+		return (0);
+	}
 	i = 0;
 	while (ft_isspace(arg[i]))
 		i++;
@@ -87,15 +93,22 @@ int	is_quiet_mode(t_data *data)
 
 int	exit_builtin(t_data *data, char **args)
 {
-	int	exit_code;
-	int	quiet;
+	int		exit_code;
+	int		quiet;
 	bool	error;
+	char	*exit_str;
 
 	quiet = is_quiet_mode(data);
 	if (!quiet || data->interactive)
 		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!args || !args[1])
-		exit_code = data->g_last_exit_code;
+	{
+		exit_str = get_env_var_value(data->env, "?");
+		if (exit_str)
+			exit_code = ft_atoi(exit_str);
+		else
+			exit_code = 0;
+	}
 	else
 	{
 		exit_code = get_exit_code(data, args[1], &error);

@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:26 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 12:05:27 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:01:43 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	export_builtin(t_data *data, char **args)
 {
 	int		i;
 	int		ret;
-	char	**temp;
+	char	*key;
+	char	*value;
+	char	*equals;
 
 	ret = EXIT_SUCCESS;
 	i = 1;
@@ -24,18 +26,34 @@ int	export_builtin(t_data *data, char **args)
 		return (env_builtin(data, NULL));
 	while (args[i])
 	{
-		if (!is_valid_env_var_key(args[i]))
-			return (errcmd_msg("export",
-					args[i], "not a valid identifier", EXIT_FAILURE));
-		else if (ft_strchr(args[i], '='))
+		equals = ft_strchr(args[i], '=');
+		if (equals)
 		{
-			temp = ft_split(args[i], '=');
-			if (!temp)
-				return (EXIT_FAILURE);
-			set_env_var(data, temp[0], temp[1]);
-			free_str_tab(temp);
+			key = ft_strndup(args[i], equals - args[i]);
+			value = ft_strdup(equals + 1);
 		}
+		else
+		{
+			key = ft_strdup(args[i]);
+			value = NULL;
+		}
+		if (!is_valid_env_var_key(key))
+		{
+			ret = errcmd_msg("export", args[i],
+					"not a valid identifier", EXIT_FAILURE);
+			free(key);
+			if (value)
+				free(value);
+		}
+		else if (equals)
+		{
+			set_env_var(data, key, value);
+			free(key);
+			free(value);
+		}
+		else
+			free(key);
 		i++;
 	}
-	return (0);
+	return (ret);
 }

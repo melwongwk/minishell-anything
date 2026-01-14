@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:10 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 14:21:59 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:01:22 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ char	**realloc_env_var(t_data *data, int size)
 	new_env = ft_calloc(size + 1, sizeof(char *));
 	if (!new_env)
 		return (NULL);
-	// if (!data->env)
-	// 	return (new_env);
 	i = 0;
 	while (i < size && data->env[i])
 	{

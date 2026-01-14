@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:52 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 14:23:56 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:58:13 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	execute_sys_bin(t_data *data, t_command *cmd)
 	cmd->path = get_cmd_path(data, cmd->command);
 	if (!cmd->path)
 		return (CMD_NOT_FOUND);
-	if (execve(cmd->command, cmd->args, data->env) == -1)
+	if (execve(cmd->path, cmd->args, data->env) == -1)
 		return (errcmd_msg("execve", NULL, strerror(errno), errno));
 	return (CMD_NOT_FOUND);
 }

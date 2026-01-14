@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 12:58:48 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:54:41 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	run_prompt(t_env *env)
 	ft_bzero(&data, sizeof(t_data));
 	data.env = env_list_to_array(env);
 	data.interactive = true;
+	set_env_var(&data, "?", "0");
 	while (1)
 	{
 		line = readline("minishell:~$ ");
@@ -43,10 +44,11 @@ void	run_prompt(t_env *env)
 		join_tokens(data.token);
 		data.cmd = parse_commands(data.token);
 		handle_heredocs(data.cmd, data.env, 0);
-		print_commands(data.cmd);
+		execute(&data);
 		free_commands(data.cmd);
 		free_tokens(data.token);
 		free(line);
 	}
+	// free_split(datav);
 	free_split(data.env);
 }

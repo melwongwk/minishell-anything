@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 07:13:45 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:00:47 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:15:24 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 	int		len;
 	bool	should_free_value;
 
+	(void)last_status;
 	i = 0;
 	should_free_value = false;
 	while (s[i] && s[i] != '$')
@@ -33,8 +34,9 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 		return (ft_strdup(s));
 	if (s[i + 1] == '?')
 	{
-		value = ft_itoa(last_status);
-		should_free_value = true;
+		value = env_get(envp, "?");
+		if (!value)
+			value = "0";
 		name = ft_strdup("$?");
 	}
 	else

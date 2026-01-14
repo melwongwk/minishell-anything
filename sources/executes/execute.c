@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:44 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 12:44:29 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:16:13 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ static int	get_children(t_data *data)
 	while (wpid != -1 || errno != ECHILD)
 	{
 		wpid = waitpid(-1, &status, 0);
-		if (wpid == data->pid)
+		if (wpid > 0)
 			save_status = status;
-		continue ;
 	}
 	if (WIFSIGNALED(save_status))
 		status = 128 + WTERMSIG(save_status);
@@ -63,7 +62,7 @@ static	int	create_children(t_data *data)
 
 	in = -1;
 	cmd = data->cmd;
-	while (data->pid != 0 && cmd)
+	while (cmd)
 	{
 		if (cmd->next && pipe(cmd->pipe_fd) == -1)
 			return (errcmd_msg("pipe", NULL, strerror(errno), EXIT_FAILURE));
@@ -104,17 +103,24 @@ int	execute(t_data *data)
 
 	ret = prep_for_exec(data);
 	if (ret != CMD_NOT_FOUND)
+	{
+		set_env_var(data, "?", ft_itoa(ret));
 		return (ret);
+	}
 	if (!data->cmd->pipe_output && !data->cmd->prev
 		&& check_infile_outfile(data->cmd->io_fds))
 	{
-		if (redirect_io(data->cmd->io_fds) == false)
-			return (EXIT_FAILURE);
+		redirect_io(data->cmd->io_fds);
 		ret = execute_builtin(data, data->cmd);
 		if (restore_io(data->cmd->io_fds) == false)
 			return (EXIT_FAILURE);
 	}
 	if (ret != CMD_NOT_FOUND)
+	{
+		set_env_var(data, "?", ft_itoa(ret));
 		return (ret);
-	return (create_children(data));
+	}
+	ret = create_children(data);
+	set_env_var(data, "?", ft_itoa(ret));
+	return (ret);
 }

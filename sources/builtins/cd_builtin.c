@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:41 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 13:49:58 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 17:00:59 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static bool	change_dir(t_data *data, char *path)
 	ret = getcwd(cwd, PATH_MAX);
 	if (!ret)
 	{
-	errcmd_msg("cd: error retrieving current directory",
+		errcmd_msg("cd: error retrieving current directory",
 			"getcwd: cannot access parent directories",
 			strerror(errno), errno);
 		ret = ft_strjoin(data->working_dir, "/");
@@ -76,7 +76,7 @@ int	cd_builtin(t_data *data, char **args)
 		return (!change_dir(data, path));
 	}
 	if (args[2])
-	return (errcmd_msg("cd", NULL, "too many arguments", EXIT_FAILURE));
+		return (errcmd_msg("cd", NULL, "too many arguments", EXIT_FAILURE));
 	if (ft_strncmp(args[1], "-", 2) == 0)
 	{
 		path = get_env_var_value(data->env, "OLDPWD");

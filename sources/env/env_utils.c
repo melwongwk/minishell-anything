@@ -23,7 +23,7 @@ int	get_env_var_index(char **env, char *var)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(temp, env[i], ft_strlen(temp)))
+		if (ft_strncmp(temp, env[i], ft_strlen(temp)) == 0)
 		{
 			free_ptr(temp);
 			return (i);
@@ -45,7 +45,7 @@ char	*get_env_var_value(char **env, char *var)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(temp, env[i], ft_strlen(temp)))
+		if (ft_strncmp(temp, env[i], ft_strlen(temp)) == 0)
 		{
 			free_ptr(temp);
 			return (ft_strchr(env[i], '=') + 1);

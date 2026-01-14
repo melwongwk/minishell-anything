@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 14:21:33 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:53:36 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ typedef struct s_data
 	char		*old_working_dir;
 	t_command	*cmd;
 	pid_t		pid;
-	int			g_last_exit_code; // need edit to be the env var
 }				t_data;
 
 enum e_token_types

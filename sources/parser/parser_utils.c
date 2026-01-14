@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 22:49:42 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:00:40 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 15:59:58 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@ t_command	*cmd_new(void)
 	if (!cmd)
 		return (NULL);
 	cmd->io_fds = ft_calloc(1, sizeof(t_io_fds));
+	//incluse initialise
+	if (!cmd->io_fds)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	/* initialize fds to -1 to indicate "not set" */
+	cmd->io_fds->fd_in = -1;
+	cmd->io_fds->fd_out = -1;
+	cmd->io_fds->stdin_backup = -1;
+	cmd->io_fds->stdout_backup = -1;
+	cmd->io_fds->heredoc_fd = -1;
+	cmd->pipe_output = false;
 	return (cmd);
 }
 
