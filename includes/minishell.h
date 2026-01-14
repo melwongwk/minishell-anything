@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:03:16 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:21:33 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,12 @@ char		**env_list_to_array(t_env *env);
 int			execute_builtin(t_data *data, t_command *cmd);
 void		execute_command(t_data *data, t_command *cmd);
 // execute_utils.c
-int			check_command_found(t_data *data, t_command *cmd);
+int			check_command_found(t_command *cmd);
 int			cmd_is_dir(char *cmd);
 // execute.c
 int			execute(t_data *data);
 // parse_path.c
-char		*get_cmd_path( t_data *data, t_command *cmd);
+char		*get_cmd_path( t_data *data, char *cmd);
 char		*find_valid_cmd_path(char *find_cmd, char **env_paths);
 char		**get_paths_from_env(t_data *data);
 
@@ -184,7 +184,7 @@ int			is_valid_env_var_key(char *key);
 int			ft_isalnum(int c);
 // env_set.c
 int			env_var_count(char **env);
-char		**relloac_env_var(t_data *data, int size);
+char		**realloc_env_var(t_data *data, int size);
 int			set_env_var(t_data *data, char *key, char *value);
 int			remove_env_var(t_data *data, int var_index);
 

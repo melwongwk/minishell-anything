@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 22:49:35 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:00:35 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 13:05:13 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ t_command	*parse_commands(t_token *tokens)
 	t_command	*last;
 	t_command	*cmd;
 
-	*cmds = NULL;
-	*last = NULL;
+	cmds = NULL;
+	last = NULL;
 	while (tokens)
 	{
 		cmd = cmd_new();

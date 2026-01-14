@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 12:05:32 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 13:56:09 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	exit_builtin(t_data *data, char **args)
 {
 	int	exit_code;
 	int	quiet;
-	int	error;
+	bool	error;
 
 	quiet = is_quiet_mode(data);
 	if (!quiet || data->interactive)
@@ -100,10 +100,10 @@ int	exit_builtin(t_data *data, char **args)
 	{
 		exit_code = get_exit_code(data, args[1], &error);
 		if (error)
-			exit_code = errmsg_cmd("exit", args[1],
+			exit_code = errcmd_msg("exit", args[1],
 					"numeric argument required", 2);
 		else if (args[2])
-			return (errmsg_cmd("exit", NULL, "too many arguments", 1));
+			return (errcmd_msg("exit", NULL, "too many arguments", 1));
 	}
 	exit_shell(data, exit_code);
 	return (2);

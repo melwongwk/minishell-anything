@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:49 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 12:04:50 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:17:42 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cmd_is_dir(char *cmd)
 	return (S_ISDIR(path_stat.st_mode));
 }
 
-int	check_command_found(t_data *data, t_command *cmd)
+int	check_command_found(t_command *cmd)
 {
 	if (access(cmd->command, F_OK) != 0)
 		return (errcmd_msg(cmd->command, NULL, strerror(errno), CMD_NOT_FOUND));

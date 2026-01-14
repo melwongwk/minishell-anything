@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:03:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 14:54:10 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:29:22 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	clear_cmd(t_data *data)
 		if (current->io_fds)
 			free_io(current->io_fds);
 		next = current->next;
-		free_ptr(current);
+		free(current);
 		current = next;
 	}
 }
@@ -58,7 +58,7 @@ void	clear_token(t_data *data)
 		if (current->str_backup)
 			free_ptr(current->str_backup);
 		next = current->next;
-		free_ptr(current);
+		free(current);
 		current = next;
 	}
 }

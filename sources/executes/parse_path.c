@@ -36,11 +36,11 @@ char	*find_valid_cmd_path(char *find_cmd, char **env_paths)
 	return (NULL);
 }
 
-char	**get_paths_form_env(t_data *data)
+char	**get_paths_from_env(t_data *data)
 {
 	char	**env_paths;
 
-	if (get_env_var_index(data->env, "PATH" == -1))
+	if (get_env_var_index(data->env, "PATH") == -1)
 		return (NULL);
 	env_paths = ft_split(get_env_var_value(data->env, "PATH"), ':');
 	if (!env_paths)
@@ -48,7 +48,7 @@ char	**get_paths_form_env(t_data *data)
 	return (env_paths);
 }
 
-char	*get_cmd_path( t_data *data, t_command *cmd)
+char	*get_cmd_path( t_data *data, char *cmd)
 {
 	char	**env_paths;
 	char	*find_cmd;

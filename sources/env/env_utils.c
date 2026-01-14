@@ -41,7 +41,7 @@ char	*get_env_var_value(char **env, char *var)
 
 	temp = ft_strjoin(var, "=");
 	if (!temp)
-		return (-1);
+		return (NULL);
 	i = 0;
 	while (env[i])
 	{

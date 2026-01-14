@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:11 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 16:35:45 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:27:36 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_io(t_io_fds *io)
 	if (io->outfile)
 		free_ptr(io->outfile);
 	if (io)
-		free_ptr(io);
+		free(io);
 }
 
 void	free_data(t_data *data, int clear_history)

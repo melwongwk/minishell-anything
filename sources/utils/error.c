@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:03:46 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 12:03:48 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:28:07 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*join_strs(char *s1, char *s2)
 	if (!s1)
 		return (ft_strdup(s2));
 	temp = s1;
-	s1 = ft_strjoin2(s1, s2);
+	s1 = ft_strjoin(s1, s2);
 	free(temp);
 	return (s1);
 }

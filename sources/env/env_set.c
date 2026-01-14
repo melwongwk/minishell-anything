@@ -6,11 +6,11 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:10 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/13 15:58:22 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 14:21:59 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	env_var_count(char **env)
 {
@@ -22,7 +22,7 @@ int	env_var_count(char **env)
 	return (count);
 }
 
-char	**relloac_env_var(t_data *data, int size)
+char	**realloc_env_var(t_data *data, int size)
 {
 	char	**new_env;
 	int		i;
@@ -30,13 +30,15 @@ char	**relloac_env_var(t_data *data, int size)
 	new_env = ft_calloc(size + 1, sizeof(char *));
 	if (!new_env)
 		return (NULL);
+	// if (!data->env)
+	// 	return (new_env);
 	i = 0;
-	while (data->env[i] && i < size)
+	while (i < size && data->env[i])
 	{
 		new_env[i] = data->env[i];
 		i++;
 	}
-	free_ptr(data->env);
+	free(data->env);
 	return (new_env);
 }
 
@@ -59,7 +61,7 @@ int	set_env_var(t_data *data, char *key, char *value)
 	else
 	{
 		var_index = env_var_count(data->env);
-		data->env = relloac_env_var(data, var_index + 1);
+		data->env = realloc_env_var(data, var_index + 1);
 		if (data->env == NULL)
 			return (free_ptr(temp), 0);
 		data->env[var_index] = ft_strjoin(key, temp);
@@ -70,8 +72,6 @@ int	set_env_var(t_data *data, char *key, char *value)
 
 int	remove_env_var(t_data *data, int var_index)
 {
-	int	count;
-
 	if (var_index >= env_var_count(data->env) || var_index < 0)
 		return (0);
 	free_ptr(data->env[var_index]);
@@ -81,7 +81,7 @@ int	remove_env_var(t_data *data, int var_index)
 		var_index++;
 	}
 	data->env[var_index] = NULL;
-	data->env = relloac_env_var(data, var_index);
+	data->env = realloc_env_var(data, var_index);
 	if (data->env == NULL)
 		return (0);
 	return (1);

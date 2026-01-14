@@ -21,15 +21,15 @@ int	restore_io(t_io_fds *io)
 		return (ret);
 	if (io->stdin_backup != -1)
 	{
-		if (dup2(io->stdin_backup, STDIN_FILENO) == -1)
-			ret = errmsg_cmd("dup2", "restore stdin", strerror(errno), false);
+			if (dup2(io->stdin_backup, STDIN_FILENO) == -1)
+				ret = errcmd_msg("dup2", "restore stdin", strerror(errno), false);
 		close(io->stdin_backup);
 		io->stdin_backup = -1;
 	}
 	if (io->stdout_backup != -1)
 	{
 		if (dup2(io->stdout_backup, STDOUT_FILENO) == -1)
-			ret = errmsg_cmd("dup2", "restore stdout", strerror(errno), false);
+			ret = errcmd_msg("dup2", "restore stdout", strerror(errno), false);
 		close(io->stdout_backup);
 		io->stdout_backup = -1;
 	}
@@ -40,9 +40,9 @@ static int	redirect_helper(int backup_fd, int fd_new, char *infile)
 {
 	backup_fd = dup(STDIN_FILENO);
 	if (backup_fd == -1)
-		return (errmsg_cmd("dup", "std backup", strerror(errno), false));
+		return (errcmd_msg("dup", "std backup", strerror(errno), false));
 	if (dup2(fd_new, STDIN_FILENO) == -1)
-		return (errmsg_cmd("dup2", infile, strerror(errno), false));
+		return (errcmd_msg("dup2", infile, strerror(errno), false));
 	close (fd_new);
 	fd_new = -1;
 	return (true);
@@ -72,14 +72,14 @@ int	redirect_each_cmd_io(t_io_fds *io)
 	if (io->fd_in != -1)
 	{
 		if (dup2(io->fd_in, STDIN_FILENO) == -1)
-			ret = errmsg_cmd("dup2", io->infile, strerror(errno), false);
+			ret = errcmd_msg("dup2", io->infile, strerror(errno), false);
 		close(io->fd_in);
 		io->fd_in = -1;
 	}
 	if (io->fd_out != -1)
 	{
 		if (dup2(io->fd_out, STDOUT_FILENO) == -1)
-			ret = errmsg_cmd("dup2", io->outfile, strerror(errno), false);
+			ret = errcmd_msg("dup2", io->outfile, strerror(errno), false);
 		close(io->fd_out);
 		io->fd_out = -1;
 	}

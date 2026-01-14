@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+         #
+#    By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/06 19:01:56 by melwong           #+#    #+#              #
-#    Updated: 2025/10/06 19:01:59 by melwong          ###   ########.fr        #
+#    Updated: 2026/01/14 14:26:49 by hho-jia-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,15 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/parser_utils.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redirections.c \
-					$(SRC_DIR)/parser/expansion.c
+					$(SRC_DIR)/parser/expansion.c \
+					$(SRC_DIR)/builtins/cd_builtin.c $(SRC_DIR)/builtins/echo_builtin.c $(SRC_DIR)/builtins/env_builtin.c \
+					$(SRC_DIR)/builtins/exit_builtin.c $(SRC_DIR)/builtins/export_builtin.c $(SRC_DIR)/builtins/pwd_builtin.c \
+					$(SRC_DIR)/builtins/unset_builtin.c \
+					$(SRC_DIR)/env/env_set.c $(SRC_DIR)/env/env_utils.c \
+					$(SRC_DIR)/executes/execute_utils.c $(SRC_DIR)/executes/execute_cmd.c \
+					$(SRC_DIR)/executes/execute.c $(SRC_DIR)/executes/parse_path.c \
+					$(SRC_DIR)/redirection/pipe.c $(SRC_DIR)/redirection/file_io.c \
+					$(SRC_DIR)/utils/cleanup.c $(SRC_DIR)/utils/error.c $(SRC_DIR)/utils/exit.c
 
 OBJS			=	$(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 OBJS_DIR		=	objects
@@ -56,7 +64,7 @@ LIBFT			=	$(LIBFT_DIR)/libft.a
 
 # Rules
 
-all: $(NAME)
+all:$(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	$(SILENT)$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
