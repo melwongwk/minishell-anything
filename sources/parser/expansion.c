@@ -23,11 +23,9 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 	char	*final;
 	int		start;
 	int		len;
-	bool	should_free_value;
 
 	(void)last_status;
 	i = 0;
-	should_free_value = false;
 	while (s[i] && s[i] != '$')
 		i++;
 	if (!s[i])
@@ -58,8 +56,6 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 	free(suffix);
 	free(tmp);
 	free(name);
-	if (should_free_value)
-		free(value);
 	return (final);
 }
 
@@ -88,6 +84,7 @@ static void	split_token_on_whitespace(t_token *token)
 {
 	char	**words;
 	int		i;
+	int		word_count;
 	t_token	*new_token;
 	t_token	*current;
 
@@ -97,9 +94,19 @@ static void	split_token_on_whitespace(t_token *token)
 		free(words);
 		return ;
 	}
-	if (!words[1])
+	word_count = 0;
+	while (words[word_count])
+		word_count++;
+	if (word_count <= 1)
 	{
-		free(words[0]);
+		if (word_count == 1)
+		{
+			free(token->str);
+			token->str = ft_strdup(words[0]);
+		}
+		i = 0;
+		while (words[i])
+			free(words[i++]);
 		free(words);
 		return ;
 	}

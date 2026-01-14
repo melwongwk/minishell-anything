@@ -18,6 +18,7 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 	pid_t	pid;
 	int		status;
 	char	*line;
+	char	*expanded;
 
 	if (pipe(fd) == -1)
 		return ;
@@ -32,7 +33,14 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 			if (!line || !ft_strcmp(line, cmd->io_fds->heredoc_delimiter))
 				break ;
 			if (!cmd->io_fds->heredoc_quotes)
-				line = expand_string(line, envp, last_status);
+			{
+				expanded = expand_string(line, envp, last_status);
+				if (expanded)
+				{
+					free(line);
+					line = expanded;
+				}
+			}
 			if (line)
 			{
 				write(fd[1], line, ft_strlen(line));
