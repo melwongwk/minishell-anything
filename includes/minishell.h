@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 12:28:09 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/14 12:38:25 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include "libft.h"
+# include <limits.h>
+# include <stdio.h>
+# include <errno.h>
+# include <sys/stat.h>
+# define CMD_NOT_FOUND 127
+# define CMD_NOT_EXECUTABLE 126
 
 typedef struct s_token
 {
@@ -38,8 +44,8 @@ typedef struct s_io_fds
 	char	*outfile;
 	char	*heredoc_delimiter;
 	bool	heredoc_quotes;
+	int		heredoc_fd; // need close when cleaning?
 	int		fd_in;
-	int		heredoc_fd;
 	int		fd_out;
 	int		stdin_backup;
 	int		stdout_backup;
@@ -51,7 +57,7 @@ typedef struct s_command
 	char				*path;
 	char				**args;
 	bool				pipe_output;
-	int					*pipe_fd;
+	int					pipe_fd[2];
 	t_io_fds			*io_fds;
 	struct s_command	*next;
 	struct s_command	*prev;
@@ -67,6 +73,7 @@ typedef struct s_data
 	char		*old_working_dir;
 	t_command	*cmd;
 	pid_t		pid;
+	int			g_last_exit_code; // need edit to be the env var
 }				t_data;
 
 enum e_token_types
@@ -89,7 +96,7 @@ enum e_quoting_status
 	DQUOTE
 };
 
-typedef struct s_env
+typedef struct s_env // do you still need this?
 {
 	char			*key;
 	char			*value;
@@ -131,5 +138,67 @@ void		expand_tokens(t_token *tokens, char **envp, int last_status);
 
 /* env bridging */
 char		**env_list_to_array(t_env *env);
+
+
+// Howard
+
+// execute folder
+// execute_cmd.c
+int		execute_builtin(t_data *data, t_command *cmd);
+void	execute_command(t_data *data, t_command *cmd);
+// execute_utils.c
+int		check_command_found(t_data *data, t_command *cmd);
+int		cmd_is_dir(char *cmd);
+// execute.c
+int		execute(t_data *data);
+// parse_path.c
+char	*get_cmd_path( t_data *data, t_command *cmd);
+char	*find_valid_cmd_path(char *find_cmd, char **env_paths);
+char	**get_paths_from_env(t_data *data);
+
+// Redirection Folder
+// file_io.c
+int		restore_io(t_io_fds *io);
+int		redirect_io(t_io_fds *io_fds);
+int		check_infile_outfile(t_io_fds *io_fds);
+int		redirect_each_cmd_io(t_io_fds *io);
+// pipe.c
+void	close_unused_pipe_fds(t_data *data, t_command *cmd);
+
+// Builtin folder
+// cd.c
+int		cd_builtin(t_data *data, char **args);
+int		echo_builtin(char **args);
+int		env_builtin(t_data *data, char **args);
+int		export_builtin(t_data *data, char **args);
+int		pwd_builtin(t_data *data);
+int		unset_builtin(t_data *data, char **args);
+int		exit_builtin(t_data *data, char **args);
+
+// Env folder
+// env_utils.c
+int		get_env_var_index(char **env, char *var);
+char	*get_env_var_value(char **env, char *var);
+int		is_valid_env_var_key(char *key);
+int		ft_isalnum(int c);
+// env_set.c
+int		env_var_count(char **env);
+char	**relloac_env_var(t_data *data, int size);
+int		set_env_var(t_data *data, char *key, char *value);
+int		remove_env_var(t_data *data, int var_index);
+
+// Utils folder
+// cleanup.c
+void	free_io(t_io_fds *io);
+void	free_data(t_data *data, int free_env);
+void	close_fds(t_command *cmd, bool close_backup);
+void	free_ptr(char *str);
+void	free_str_tab(char **tab);
+// error.c
+int		errcmd_msg(char *cmd, char *detail, char *err_msg, int err_no);
+// exit.c
+void	exit_shell(t_data *data, int exit_code);
+void	clear_cmd(t_data *data);
+void	clear_token(t_data *data);
 
 #endif
