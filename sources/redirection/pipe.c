@@ -1,0 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/13 12:04:26 by hho-jia-          #+#    #+#             */
+/*   Updated: 2026/01/13 12:04:27 by hho-jia-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+void	close_unused_pipe_fds(t_data *data, t_command *cmd)
+{
+	while (data->cmd)
+	{
+		if (data->cmd != cmd)
+		{
+			close(data->cmd->io_fds->fd_in);
+			close(data->cmd->io_fds->fd_out);
+		}
+		data->cmd = data->cmd->next;
+	}
+}
