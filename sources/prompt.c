@@ -12,48 +12,46 @@
 
 #include "minishell.h"
 
-void	run_prompt(t_env *env)
+void	run_prompt(char **envp)
 {
-	char		*line;
-	t_data		data;
+	t_data	*data;
 
-	ft_bzero(&data, sizeof(t_data));
-	data.env = env_list_to_array(env);
-	data.interactive = true;
-	set_env_var(&data, "?", "0");
+	data = ft_calloc(1, sizeof(t_data));
+	data->env = dup_envp(envp);
+	data->interactive = true;
+	set_env_var(data, "?", "0");
 	while (1)
 	{
-		line = readline("minishell:~$ ");
-		if (!line)
+		data->user_input = readline("minishell:~$ ");
+		if (!data->user_input)
 		{
 			printf("exit\n");
 			break ;
 		}
-		if (*line)
-			add_history(line);
-		data.user_input = line;
-		data.token = lexer(line);
-		if (!data.token)
+		if (*data->user_input)
+			add_history(data->user_input);
+		data->token = lexer(data->user_input);
+		if (!data->token)
 		{
 			printf("minishell: syntax error: unclosed quote\n");
-			free(line);
+			free(data->user_input);
 			continue ;
 		}
-		if (!check_syntax(data.token))
+		if (!check_syntax(data->token))
 		{
-			printf("Syntax error\n");
-			free(line);
-			free_tokens(data.token);
-			data.token = NULL;
+			printf("syntax error\n");
+			free_tokens(data->token);
+			free(data->user_input);
+			data->token = NULL;
+			data->user_input = NULL;
 			continue ;
 		}
-		expand_tokens(data.token, data.env, 0);
-		join_tokens(data.token);
-		data.cmd = parse_commands(data.token);
-		handle_heredocs(data.cmd, data.env, 0);
-		execute(&data);
-		free_data(&data, false); // must use with execute together to clean the data
+		expand_tokens(data->token, data->env, 0);
+		join_tokens(data->token);
+		data->cmd = parse_commands(data->token);
+		handle_heredocs(data->cmd, data->env, 0);
+		execute(data);
+		free_data(data, false); // must use with execute together to clean the data
 	}
-	free_str_tab(data.env); // need delete after all the env is deleted
 	rl_clear_history();
 }

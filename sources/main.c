@@ -14,13 +14,9 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_env	*env;
-
 	(void)ac;
 	(void)av;
-	env = init_env(envp);
 	init_signals();
-	run_prompt(env);
-	free_env(env); // remove when done
+	run_prompt(envp);
 	return (0);
 }

@@ -79,3 +79,24 @@ int	ft_isalnum(int c)
 		return (c);
 	return (0);
 }
+
+char **dup_envp(char **envp)
+{
+    int i;
+    char **copy;
+
+    i = 0;
+    while (envp[i])
+        i++;
+    copy = ft_calloc(i + 1, sizeof(char *));
+    if (!copy)
+        return (NULL);
+    i = 0;
+    while (envp[i])
+    {
+        copy[i] = ft_strdup(envp[i]);
+        i++;
+    }
+    return (copy);
+}
+

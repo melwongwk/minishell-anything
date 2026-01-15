@@ -98,16 +98,7 @@ enum e_quoting_status
 	DQUOTE
 };
 
-typedef struct s_env // do you still need this?
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;	
-}					t_env;
-
-void		run_prompt(t_env *env);
-t_env		*init_env(char **envp);
-void		free_env(t_env *env);
+void		run_prompt(char **envp);
 void		init_signals(void);
 
 int			is_redir(char c);
@@ -116,6 +107,7 @@ char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
 void		handle_heredocs(t_command *cmds, char **envp, int last_status);
 char		*expand_string(char *s, char **envp, int last_status);
+char		**dup_envp(char **envp);
 
 /* lexer */
 t_token		*token_new(const char *s, int type, int status);
@@ -133,9 +125,6 @@ void		print_commands(t_command *cmd);
 void		expand_commands(t_command *cmds, char **envp, int last_status);
 char		*env_get(char **envp, const char *key);
 void		expand_tokens(t_token *tokens, char **envp, int last_status);
-
-/* env bridging */
-char		**env_list_to_array(t_env *env);
 
 // Howard
 // execute folder
