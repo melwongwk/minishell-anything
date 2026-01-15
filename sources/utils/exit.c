@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:03:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 14:29:22 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 18:29:03 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	clear_cmd(t_data *data)
 	current = data->cmd;
 	while (current)
 	{
-		if (current->command)
-			free_ptr(current->command);
 		if (current->args)
 			free_str_tab(current->args);
 		if (current->path)
@@ -61,4 +59,13 @@ void	clear_token(t_data *data)
 		free(current);
 		current = next;
 	}
+}
+
+void	set_exit_status(t_data *data, int ret)
+{
+	char	*exit_str;
+
+	exit_str = ft_itoa(ret);
+	set_env_var(data, "?", exit_str);
+	free(exit_str);
 }

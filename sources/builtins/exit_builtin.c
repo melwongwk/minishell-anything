@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 17:00:23 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 18:51:19 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,38 +20,32 @@ static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
 	return (*error);
 }
 
-static int	ft_atoi_long(const char *str, bool *error)
+static bool	is_valid_exit_arg(char *arg)
 {
-	unsigned long long	num;
-	int					neg;
-	int					i;
+	unsigned long long	i;
 
-	num = 0;
-	neg = 1;
 	i = 0;
-	while (str[i] && ft_isspace(str[i]))
+	while (ft_isspace(arg[i]))
 		i++;
-	if (str[i] == '+')
+	if (arg[i] == '\0')
+		return (false);
+	if (arg[i] == '-' || arg[i] == '+')
 		i++;
-	else if (str[i] == '-')
+	if (!ft_isdigit(arg[i]))
+		return (false);
+	while (arg[i])
 	{
-		neg *= -1;
+		if (!ft_isdigit(arg[i]) && !ft_isspace(arg[i]))
+			return (false);
 		i++;
 	}
-	while (str[i] && ft_isdigit(str[i]))
-	{
-		num = (num * 10) + (str[i] - '0');
-		if (check_out_of_range(neg, num, error))
-			break ;
-		i++;
-	}
-	return (num * neg);
+	return (true);
 }
 
 static int	get_exit_code(t_data *data, char *arg, bool *error)
 {
-	unsigned long long	i;
-	char				*exit_str;
+	char	*exit_str;
+	int		code;
 
 	if (!arg)
 	{
@@ -60,23 +54,10 @@ static int	get_exit_code(t_data *data, char *arg, bool *error)
 			return (ft_atoi(exit_str));
 		return (0);
 	}
-	i = 0;
-	while (ft_isspace(arg[i]))
-		i++;
-	if (arg[i] == '\0')
+	if (!is_valid_exit_arg(arg))
 		*error = true;
-	if (arg[i] == '-' || arg[i] == '+')
-		i++;
-	if (!ft_isdigit(arg[i]))
-		*error = true;
-	while (arg[i])
-	{
-		if (!isdigit(arg[i]) && !ft_isspace(arg[i]))
-			*error = true;
-		i++;
-	}
-	i = ft_atoi_long(arg, error);
-	return (i % 256);
+	code = ft_atoi_long(arg, error);
+	return (code % 256);
 }
 
 int	is_quiet_mode(t_data *data)
@@ -96,16 +77,14 @@ int	exit_builtin(t_data *data, char **args)
 	int		exit_code;
 	int		quiet;
 	bool	error;
-	char	*exit_str;
 
 	quiet = is_quiet_mode(data);
 	if (!quiet || data->interactive)
 		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!args || !args[1])
 	{
-		exit_str = get_env_var_value(data->env, "?");
-		if (exit_str)
-			exit_code = ft_atoi(exit_str);
+		if (get_env_var_value(data->env, "?"))
+			exit_code = get_env_var_value(data->env, "?");
 		else
 			exit_code = 0;
 	}

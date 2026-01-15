@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:11 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 14:27:36 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 16:58:31 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ void	close_fds(t_command *cmd, bool close_backup)
 {
 	while (cmd)
 	{
-		if (cmd->io_fds->fd_in != -1)
-			close(cmd->io_fds->fd_in);
-		if (cmd->io_fds->fd_out != -1)
-			close(cmd->io_fds->fd_out);
-		if (close_backup)
-			restore_io(cmd->io_fds);
+		if (cmd->io_fds)
+		{
+			if (cmd->io_fds->fd_in != -1)
+				close(cmd->io_fds->fd_in);
+			if (cmd->io_fds->fd_out != -1)
+				close(cmd->io_fds->fd_out);
+			if (close_backup)
+				restore_io(cmd->io_fds);
+		}
 		cmd = cmd->next;
 	}
 }
@@ -86,9 +89,8 @@ void	free_str_tab(char **tab)
 		while (tab[i])
 		{
 			free_ptr(tab[i]);
-			tab[i] = NULL;
+			i++;
 		}
-		free (tab);
-		tab = NULL;
+		free(tab);
 	}
 }

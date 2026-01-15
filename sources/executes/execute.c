@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:44 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 17:16:13 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 18:29:47 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ static	int	prep_for_exec(t_data *data)
 
 int	execute(t_data *data)
 {
-	int	ret;
+	int		ret;
 
 	ret = prep_for_exec(data);
 	if (ret != CMD_NOT_FOUND)
 	{
-		set_env_var(data, "?", ft_itoa(ret));
+		set_exit_status(data, ret);
 		return (ret);
 	}
 	if (!data->cmd->pipe_output && !data->cmd->prev
@@ -117,10 +117,10 @@ int	execute(t_data *data)
 	}
 	if (ret != CMD_NOT_FOUND)
 	{
-		set_env_var(data, "?", ft_itoa(ret));
+		set_exit_status(data, ret);
 		return (ret);
 	}
 	ret = create_children(data);
-	set_env_var(data, "?", ft_itoa(ret));
+	set_exit_status(data, ret);
 	return (ret);
 }
