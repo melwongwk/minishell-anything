@@ -44,6 +44,11 @@ static char	*extract_segment(char *s, int *i, int *status, bool *is_var)
 		out = ft_strndup(s + start, *i - start);
 		if (s[*i] == q)
 			(*i)++;
+		else
+		{
+			free(out);
+			return (NULL);
+		}
 		return (out);
 	}
 	start = *i;
@@ -88,7 +93,12 @@ t_token	*lexer(char *input)
 			continue ;
 		}
 		seg = extract_segment(input, &i, &status, &is_var);
-		if (seg && *seg)
+		if (!seg)
+		{
+			free_tokens(tokens);
+			return (NULL);
+		}
+		if (*seg)
 		{
 			if (is_var)
 				new = token_new(seg, VAR, status);

@@ -46,14 +46,24 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redirections.c \
 					$(SRC_DIR)/parser/expansion.c \
-					$(SRC_DIR)/builtins/cd_builtin.c $(SRC_DIR)/builtins/echo_builtin.c $(SRC_DIR)/builtins/env_builtin.c \
-					$(SRC_DIR)/builtins/exit_builtin.c $(SRC_DIR)/builtins/export_builtin.c $(SRC_DIR)/builtins/pwd_builtin.c \
+					$(SRC_DIR)/builtins/cd_builtin.c \
+					$(SRC_DIR)/builtins/echo_builtin.c \
+					$(SRC_DIR)/builtins/env_builtin.c \
+					$(SRC_DIR)/builtins/exit_builtin.c \
+					$(SRC_DIR)/builtins/export_builtin.c \
+					$(SRC_DIR)/builtins/pwd_builtin.c \
 					$(SRC_DIR)/builtins/unset_builtin.c \
-					$(SRC_DIR)/env/env_set.c $(SRC_DIR)/env/env_utils.c \
-					$(SRC_DIR)/executes/execute_utils.c $(SRC_DIR)/executes/execute_cmd.c \
-					$(SRC_DIR)/executes/execute.c $(SRC_DIR)/executes/parse_path.c \
-					$(SRC_DIR)/redirection/pipe.c $(SRC_DIR)/redirection/file_io.c \
-					$(SRC_DIR)/utils/cleanup.c $(SRC_DIR)/utils/error.c $(SRC_DIR)/utils/exit.c
+					$(SRC_DIR)/env/env_set.c \
+					$(SRC_DIR)/env/env_utils.c \
+					$(SRC_DIR)/executes/execute_utils.c \
+					$(SRC_DIR)/executes/execute_cmd.c \
+					$(SRC_DIR)/executes/execute.c \
+					$(SRC_DIR)/executes/parse_path.c \
+					$(SRC_DIR)/redirection/pipe.c \
+					$(SRC_DIR)/redirection/file_io.c \
+					$(SRC_DIR)/utils/cleanup.c \
+					$(SRC_DIR)/utils/error.c \
+					$(SRC_DIR)/utils/exit.c
 
 OBJS			=	$(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 OBJS_DIR		=	objects

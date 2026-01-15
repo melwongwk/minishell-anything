@@ -33,11 +33,18 @@ void	run_prompt(t_env *env)
 			add_history(line);
 		data.user_input = line;
 		data.token = lexer(line);
+		if (!data.token)
+		{
+			printf("minishell: syntax error: unclosed quote\n");
+			free(line);
+			continue ;
+		}
 		if (!check_syntax(data.token))
 		{
 			printf("Syntax error\n");
 			free(line);
 			free_tokens(data.token);
+			data.token = NULL;
 			continue ;
 		}
 		expand_tokens(data.token, data.env, 0);
@@ -49,6 +56,5 @@ void	run_prompt(t_env *env)
 		free_tokens(data.token);
 		free(line);
 	}
-	// free_split(datav);
 	free_split(data.env);
 }
