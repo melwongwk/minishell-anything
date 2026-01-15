@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 16:53:36 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 18:56:15 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,15 +110,12 @@ t_env		*init_env(char **envp);
 void		free_env(t_env *env);
 void		init_signals(void);
 
-void		free_split(char **split);
-
 int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
 void		handle_heredocs(t_command *cmds, char **envp, int last_status);
 char		*expand_string(char *s, char **envp, int last_status);
-void		free_commands(t_command *cmd);
 
 /* lexer */
 t_token		*token_new(const char *s, int type, int status);
@@ -132,7 +129,6 @@ t_token		*lexer(char *input);
 t_command	*parse_commands(t_token *tokens);
 t_command	*cmd_new(void);
 void		handle_redir_token(t_command *cmd, t_token **tok);
-void		free_commands(t_command *cmd);
 void		print_commands(t_command *cmd);
 void		expand_commands(t_command *cmds, char **envp, int last_status);
 char		*env_get(char **envp, const char *key);
@@ -200,5 +196,8 @@ int			errcmd_msg(char *cmd, char *detail, char *err_msg, int err_no);
 void		exit_shell(t_data *data, int exit_code);
 void		clear_cmd(t_data *data);
 void		clear_token(t_data *data);
+void		set_exit_status(t_data *data, int ret);
+// utils.c
+int			ft_atoi_long(const char *str, bool *error);
 
 #endif
