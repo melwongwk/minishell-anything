@@ -37,16 +37,15 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 			value = "0";
 		name = ft_strdup("$?");
 	}
-	// help to check this part
-	// else if (!s[i + 1] || (!ft_isalnum(s[i + 1]) && s[i + 1] != '_')) 
-	// {
-	// 	prefix = ft_strndup(s, i + 1);
-	// 	suffix = ft_strdup(s + i + 1);
-	// 	final = ft_strjoin(prefix, suffix);
-	// 	free(prefix);
-	// 	free(suffix);
-	// 	return (final);
-	// }
+	else if (!s[i + 1] || (!ft_isalnum(s[i + 1]) && s[i + 1] != '_'))
+	{
+		prefix = ft_strndup(s, i + 1);
+		suffix = ft_strdup(s + i + 1);
+		final = ft_strjoin(prefix, suffix);
+		free(prefix);
+		free(suffix);
+		return (final);
+	}
 	else
 	{
 		start = i + 1;

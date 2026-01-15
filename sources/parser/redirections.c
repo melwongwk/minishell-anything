@@ -38,11 +38,25 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 		cur = cur->next;
 	}
 	if ((*tok)->type == INPUT)
+	{
+		free_ptr(cmd->io_fds->infile);
 		cmd->io_fds->infile = joined;
-	else if ((*tok)->type == TRUNC || (*tok)->type == APPEND)
+	}
+	else if ((*tok)->type == TRUNC)
+	{
+		free_ptr(cmd->io_fds->outfile);
 		cmd->io_fds->outfile = joined;
+		cmd->io_fds->append = false;
+	}
+	else if ((*tok)->type == APPEND)
+	{
+		free_ptr(cmd->io_fds->outfile);
+		cmd->io_fds->outfile = joined;
+		cmd->io_fds->append = true;
+	}
 	else if ((*tok)->type == HEREDOC)
 	{
+		free_ptr(cmd->io_fds->heredoc_delimiter);
 		cmd->io_fds->heredoc_delimiter = joined;
 		cmd->io_fds->heredoc_quotes = (delim->status != DEFAULT);
 	}
