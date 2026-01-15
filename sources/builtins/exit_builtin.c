@@ -6,19 +6,11 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 18:51:19 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 19:11:23 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
-{
-	if ((neg == 1 && num > LONG_MAX)
-		|| (neg == -1 && num > -(unsigned long)LONG_MIN))
-		*error = true;
-	return (*error);
-}
 
 static bool	is_valid_exit_arg(char *arg)
 {
@@ -84,7 +76,7 @@ int	exit_builtin(t_data *data, char **args)
 	if (!args || !args[1])
 	{
 		if (get_env_var_value(data->env, "?"))
-			exit_code = get_env_var_value(data->env, "?");
+			exit_code = ft_atoi(get_env_var_value(data->env, "?"));
 		else
 			exit_code = 0;
 	}

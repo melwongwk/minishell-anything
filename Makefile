@@ -6,7 +6,7 @@
 #    By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/06 19:01:56 by melwong           #+#    #+#              #
-#    Updated: 2026/01/14 14:26:49 by hho-jia-         ###   ########.fr        #
+#    Updated: 2026/01/15 19:13:18 by hho-jia-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/signal.c \
 					$(SRC_DIR)/validation.c \
 					$(SRC_DIR)/heredocs.c \
-					$(SRC_DIR)/cleanup.c \
 					$(SRC_DIR)/lexer/token_utils.c \
 					$(SRC_DIR)/lexer/lexer.c \
 					$(SRC_DIR)/lexer/lexer_utils.c \
@@ -63,7 +62,8 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/redirection/file_io.c \
 					$(SRC_DIR)/utils/cleanup.c \
 					$(SRC_DIR)/utils/error.c \
-					$(SRC_DIR)/utils/exit.c
+					$(SRC_DIR)/utils/exit.c\
+					$(SRC_DIR)/utils/utils.c
 
 OBJS			=	$(SRCS:$(SRC_DIR)/%.c=$(OBJS_DIR)/%.o)
 OBJS_DIR		=	objects

@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 07:13:45 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 17:15:24 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 19:17:47 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 			value = "0";
 		name = ft_strdup("$?");
 	}
+	// help to check this part
+	// else if (!s[i + 1] || (!ft_isalnum(s[i + 1]) && s[i + 1] != '_')) 
+	// {
+	// 	prefix = ft_strndup(s, i + 1);
+	// 	suffix = ft_strdup(s + i + 1);
+	// 	final = ft_strjoin(prefix, suffix);
+	// 	free(prefix);
+	// 	free(suffix);
+	// 	return (final);
+	// }
 	else
 	{
 		start = i + 1;

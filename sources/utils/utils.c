@@ -6,11 +6,19 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 18:53:39 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 18:54:11 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 19:21:03 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static bool	check_out_of_range(int neg, unsigned long long num, bool *error)
+{
+	if ((neg == 1 && num > LONG_MAX)
+		|| (neg == -1 && num > -(unsigned long)LONG_MIN))
+		*error = true;
+	return (*error);
+}
 
 int	ft_atoi_long(const char *str, bool *error)
 {
