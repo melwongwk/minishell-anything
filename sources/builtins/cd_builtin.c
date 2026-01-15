@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:41 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 17:00:59 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/15 16:06:39 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	update_wds(t_data *data, char *wd)
 	}
 	free_ptr(wd);
 }
+// testing
 
 static	bool	chdir_errno_mod(char *path)
 {
