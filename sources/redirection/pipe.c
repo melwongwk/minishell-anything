@@ -12,8 +12,8 @@
 
 #include "../../includes/minishell.h"
 
-void	close_unused_pipe_fds(t_data *data, t_command *cmd)
-{
-	(void)data;
-	(void)cmd;
-}
+// void	close_unused_pipe_fds(t_data *data, t_command *cmd)
+// {
+// 	(void)data;
+// 	(void)cmd;
+// }

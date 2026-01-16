@@ -152,7 +152,7 @@ int			redirect_io(t_io_fds *io_fds);
 int			check_infile_outfile(t_io_fds *io_fds);
 int			redirect_each_cmd_io(t_io_fds *io);
 // pipe.c
-void		close_unused_pipe_fds(t_data *data, t_command *cmd);
+// void		close_unused_pipe_fds(t_data *data, t_command *cmd);
 
 // Builtin folder
 // cd.c
