@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 07:13:45 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/15 19:17:47 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 19:40:52 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,13 @@ void	expand_tokens(t_token *tokens, char **envp, int last_status)
 	t_token	*t;
 	t_token	*next;
 	char	*expanded;
+	int		orig_status;
 
 	t = tokens;
 	while (t)
 	{
 		next = t->next;
+		orig_status = t->status;
 		if ((t->type == WORD || t->type == VAR) && t->str)
 		{
 			if (t->status != SQUOTE)
@@ -186,7 +188,6 @@ void	expand_tokens(t_token *tokens, char **envp, int last_status)
 				t->str = expanded;
 			}
 			t->type = WORD;
-			t->status = DEFAULT;
 			if (!t->str || !*t->str)
 			{
 				remove_token(&tokens, t);
@@ -194,7 +195,7 @@ void	expand_tokens(t_token *tokens, char **envp, int last_status)
 				continue ;
 			}
 		}
-		if (t->status == DEFAULT && t->type == WORD
+		if (orig_status == DEFAULT && t->type == WORD
 			&& t->str && has_whitespace(t->str))
 			split_token_on_whitespace(t);
 		t = t->next;

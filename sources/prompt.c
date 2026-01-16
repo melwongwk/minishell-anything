@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 18:13:21 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 19:45:35 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void	run_prompt(char **envp)
 			data->user_input = NULL;
 			continue ;
 		}
-		expand_tokens(data->token, data->env, 0);
+		expand_tokens(data->token, data->env, ft_atoi(get_env_var_value(data->env, "?")));
 		join_tokens(data->token);
 		data->cmd = parse_commands(data->token);
-		handle_heredocs(data->cmd, data->env, 0);
+		handle_heredocs(data->cmd, data->env, ft_atoi(get_env_var_value(data->env, "?")));
 		execute(data);
 		free_data(data, false); // must use with execute together to clean the data
 	}
