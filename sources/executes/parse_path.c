@@ -73,5 +73,7 @@ char	*get_cmd_path( t_data *data, char *cmd)
 		free_str_tab(env_paths);
 		return (NULL);
 	}
+	free_ptr(find_cmd);
+	free_str_tab(env_paths);
 	return (cmd_path);
 }
