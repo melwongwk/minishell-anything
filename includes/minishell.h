@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/15 18:56:15 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 17:47:39 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <unistd.h>
 # include <limits.h>
 # include <sys/wait.h>

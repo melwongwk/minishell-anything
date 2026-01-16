@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 16:58:40 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 17:38:19 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,17 @@ int	restore_io(t_io_fds *io)
 	return (ret);
 }
 
-static int	redirect_helper(int backup_fd, int fd_new, char *infile)
+static int	redirect_helper(int *backup_fd, int fd_new, int std_fd, char *file)
 {
-	backup_fd = dup(STDIN_FILENO);
-	if (backup_fd == -1)
+	int	dup_fd;
+
+	dup_fd = dup(std_fd);
+	if (dup_fd == -1)
 		return (errcmd_msg("dup", "std backup", strerror(errno), false));
-	if (dup2(fd_new, STDIN_FILENO) == -1)
-		return (errcmd_msg("dup2", infile, strerror(errno), false));
-	close (fd_new);
+	*backup_fd = dup_fd;
+	if (dup2(fd_new, std_fd) == -1)
+		return (errcmd_msg("dup2", file, strerror(errno), false));
+	close(fd_new);
 	fd_new = -1;
 	return (true);
 }
@@ -56,9 +59,15 @@ int	redirect_io(t_io_fds *io)
 	if (!io)
 		return (ret);
 	if (io->fd_in != -1)
-		ret = redirect_helper(io->stdin_backup, io->fd_in, io->infile);
+	{
+		if (!redirect_helper(&io->stdin_backup, io->fd_in, STDIN_FILENO, io->infile))
+			return (false);
+	}
 	if (io->fd_out != -1)
-		ret = redirect_helper(io->stdin_backup, io->fd_in, io->infile);
+	{
+		if (!redirect_helper(&io->stdout_backup, io->fd_out, STDOUT_FILENO, io->outfile))
+			return (false);
+	}
 	return (ret);
 }
 
