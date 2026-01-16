@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-volatile static sig_atomic_t	g_signal = 0;
+static volatile sig_atomic_t	g_signal = 0;
 
 static void	sig_int_handler(int sig)
 {
