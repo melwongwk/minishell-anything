@@ -12,13 +12,12 @@
 
 #include "minishell.h"
 
+volatile static sig_atomic_t	g_signal = 0;
+
 static void	sig_int_handler(int sig)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	g_signal = sig;
+	(void)write(STDOUT_FILENO, "\n", 1);
 }
 
 void	init_signals(void)
@@ -27,9 +26,11 @@ void	init_signals(void)
 	struct sigaction	sa_quit;
 
 	ft_bzero(&sa_int, sizeof(sa_int));
-	ft_bzero(&sa_quit, sizeof(sa_quit));
-	sa_int.sa_handler = sig_int_handler;
-	sa_quit.sa_handler = SIG_IGN;
-	sigaction(SIGINT, &sa_int, NULL);
-	sigaction(SIGQUIT, &sa_quit, NULL);
+    ft_bzero(&sa_quit, sizeof(sa_quit));
+    sa_int.sa_handler = sig_int_handler;
+    sa_int.sa_flags = SA_RESTART;
+    sigaction(SIGINT, &sa_int, NULL);
+    sa_quit.sa_handler = SIG_IGN;
+    sa_quit.sa_flags = 0;
+    sigaction(SIGQUIT, &sa_quit, NULL);
 }
