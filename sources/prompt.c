@@ -16,8 +16,12 @@ static volatile sig_atomic_t	g_signal = 0;
 
 static void	sig_int_handler(int sig)
 {
-	g_signal = sig;
+	(void)sig;
+	g_signal = SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void	init_signals(void)
@@ -42,6 +46,7 @@ void	run_prompt(char **envp)
 	data = ft_calloc(1, sizeof(t_data));
 	data->env = dup_envp(envp);
 	data->interactive = true;
+	data->heredoc_interrupted = false;
 	set_env_var(data, "?", "0");
 	while (1)
 	{
@@ -79,7 +84,12 @@ void	run_prompt(char **envp)
 		expand_tokens(data->token, data->env, ft_atoi(get_env_var_value(data->env, "?")));
 		join_tokens(data->token);
 		data->cmd = parse_commands(data->token);
-		handle_heredocs(data->cmd, data->env, ft_atoi(get_env_var_value(data->env, "?")));
+		handle_heredocs(data->cmd, data->env, ft_atoi(get_env_var_value(data->env, "?")), data);
+		if (data->heredoc_interrupted)
+		{
+			free_data(data, false);
+			continue ;
+		}
 		execute(data);
 		free_data(data, false); // must use with execute together to clean the data
 	}

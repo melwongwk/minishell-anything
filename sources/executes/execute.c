@@ -21,11 +21,12 @@ static int	get_children(t_data *data)
 	close_fds(data->cmd, false);
 	save_status = 0;
 	wpid = 0;
-	while (wpid != -1 || errno != ECHILD)
+	while (1)
 	{
 		wpid = waitpid(-1, &status, 0);
-		if (wpid > 0)
-			save_status = status;
+		if (wpid <= 0)
+			break ;
+		save_status = status;
 	}
 	if (WIFSIGNALED(save_status))
 		status = 128 + WTERMSIG(save_status);

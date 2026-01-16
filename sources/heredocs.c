@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
+void	prepare_heredoc(t_command *cmd, char **envp, int last_status, t_data *data)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -30,8 +30,16 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 		while (1)
 		{
 			line = readline("> ");
-			if (!line || !ft_strcmp(line, cmd->io_fds->heredoc_delimiter))
+			if (!line)
+			{
+				write(STDOUT_FILENO, "\n", 1);
 				break ;
+			}
+			if (ft_strcmp(line, cmd->io_fds->heredoc_delimiter) == 0)
+			{
+				free(line);
+				break ;
+			}
 			if (!cmd->io_fds->heredoc_quotes)
 			{
 				expanded = expand_string(line, envp, last_status);
@@ -60,6 +68,8 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 		{
 			close(fd[0]);
 			cmd->io_fds->fd_in = -1;
+			data->heredoc_interrupted = true;
+			set_exit_status(data, 130);
 			signal(SIGINT, SIG_DFL);
 			return ;
 		}
@@ -68,16 +78,13 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 	}
 }
 
-void	handle_heredocs(t_command *cmds, char **envp, int last_status)
+void	handle_heredocs(t_command *cmds, char **envp, int last_status, t_data *data)
 {
 	while (cmds)
 	{
-		if (cmds->io_fds->heredoc_delimiter)
-		{
-			prepare_heredoc(cmds, envp, last_status);
-			if (cmds->io_fds->fd_in == -1)
-				return ;
-		}
+		prepare_heredoc(cmds, envp, last_status, data);
+		if (data->heredoc_interrupted)
+			return ;
 		cmds = cmds->next;
 	}
 }

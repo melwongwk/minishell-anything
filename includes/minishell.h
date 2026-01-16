@@ -78,6 +78,7 @@ typedef struct s_data
 	char		*old_working_dir;
 	t_command	*cmd;
 	pid_t		pid;
+	bool		heredoc_interrupted;
 }				t_data;
 
 enum e_token_types
@@ -107,7 +108,7 @@ int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
-void		handle_heredocs(t_command *cmds, char **envp, int last_status);
+void		handle_heredocs(t_command *cmds, char **envp, int last_status, t_data *data);
 char		*expand_string(char *s, char **envp, int last_status);
 char		**dup_envp(char **envp);
 
