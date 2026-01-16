@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/15 18:18:28 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:02:11 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	sig_int_handler(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 }
 
-void	init_signal(void)
+void	init_signals(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
