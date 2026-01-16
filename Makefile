@@ -34,7 +34,6 @@ RESET			=	\033[0m
 INC				=	$(INC_DIR)/minishell.h
 SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/prompt.c \
-					$(SRC_DIR)/signal.c \
 					$(SRC_DIR)/validation.c \
 					$(SRC_DIR)/heredocs.c \
 					$(SRC_DIR)/lexer/token_utils.c \
