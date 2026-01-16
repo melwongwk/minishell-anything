@@ -54,29 +54,19 @@ char	*env_get(char **envp, const char *key)
 	return (NULL);
 }
 
-void	print_commands(t_command *cmd)
+int	has_whitespace(char *s)
 {
 	int	i;
 
-	while (cmd)
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
 	{
-		printf("COMMAND: %s\n", cmd->command);
-		i = 0;
-		while (cmd->args && cmd->args[i])
-		{
-			printf("  arg[%d]: %s\n", i, cmd->args[i]);
-			i++;
-		}
-		if (cmd->io_fds->infile)
-			printf("  infile: %s\n", cmd->io_fds->infile);
-		if (cmd->io_fds->outfile)
-			printf("  outfile: %s\n", cmd->io_fds->outfile);
-		if (cmd->io_fds->heredoc_delimiter)
-			printf("  heredoc: %s (quoted=%d)\n",
-				cmd->io_fds->heredoc_delimiter,
-				cmd->io_fds->heredoc_quotes);
-		printf("  pipe_output: %d\n", cmd->pipe_output);
-		printf("------\n");
-		cmd = cmd->next;
+		if (ft_isspace(s[i]))
+			return (1);
+		i++;
 	}
+	return (0);
 }
+

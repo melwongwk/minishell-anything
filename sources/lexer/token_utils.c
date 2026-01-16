@@ -56,18 +56,18 @@ void	token_append(t_token **head, t_token *node)
 	node->prev = cur;
 }
 
-void	print_tokens(t_token *tok)
+void	remove_token(t_token **head, t_token *t)
 {
-	while (tok)
-	{
-		printf("T(type=%d,status=%d,join=%d,var=%d) '%s'\n",
-			tok->type,
-			tok->status,
-			(int)tok->join,
-			(int)tok->var_exists,
-			(tok->str ? tok->str : "(null)"));
-		tok = tok->next;
-	}
+	if (!head || !*head || !t)
+		return ;
+	if (t->prev)
+		t->prev->next = t->next;
+	else
+		*head = t->next;
+	if (t->next)
+		t->next->prev = t->prev;
+	free(t->str);
+	free(t);
 }
 
 void	free_tokens(t_token *tok)

@@ -80,7 +80,6 @@ void	run_prompt(char **envp)
 		join_tokens(data->token);
 		data->cmd = parse_commands(data->token);
 		handle_heredocs(data->cmd, data->env, 0);
-		// print_commands(data->cmd);
 		execute(data);
 		free_data(data, false); // must use with execute together to clean the data
 	}

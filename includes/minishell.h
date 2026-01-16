@@ -115,15 +115,15 @@ char		**dup_envp(char **envp);
 t_token		*token_new(const char *s, int type, int status);
 void		token_append(t_token **head, t_token *node);
 void		free_tokens(t_token *tok);
-void		print_tokens(t_token *tok);
+void		remove_token(t_token **head, t_token *t);
 void		join_tokens(t_token *tokens);
 t_token		*lexer(char *input);
 
 /* parser */
 t_command	*parse_commands(t_token *tokens);
 t_command	*cmd_new(void);
+int			has_whitespace(char *s);
 void		handle_redir_token(t_command *cmd, t_token **tok);
-void		print_commands(t_command *cmd);
 void		expand_commands(t_command *cmds, char **envp, int last_status);
 char		*env_get(char **envp, const char *key);
 void		expand_tokens(t_token *tokens, char **envp, int last_status);

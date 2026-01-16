@@ -24,7 +24,6 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 	int		start;
 	int		len;
 
-	(void)last_status;
 	i = 0;
 	while (s[i] && s[i] != '$')
 		i++;
@@ -32,19 +31,12 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 		return (ft_strdup(s));
 	if (s[i + 1] == '?')
 	{
-		value = env_get(envp, "?");
-		if (!value)
-			value = "0";
+		value = ft_itoa(last_status);
 		name = ft_strdup("$?");
 	}
 	else if (!s[i + 1] || (!ft_isalnum(s[i + 1]) && s[i + 1] != '_'))
 	{
-		prefix = ft_strndup(s, i + 1);
-		suffix = ft_strdup(s + i + 1);
-		final = ft_strjoin(prefix, suffix);
-		free(prefix);
-		free(suffix);
-		return (final);
+		return (ft_strdup(s));
 	}
 	else
 	{
@@ -60,10 +52,12 @@ static char	*expand_one_var(char *s, char **envp, int last_status)
 	prefix = ft_strndup(s, i);
 	suffix = ft_strdup(s + i + ft_strlen(name));
 	tmp = ft_strjoin(prefix, value);
-	free(prefix);
 	final = ft_strjoin(tmp, suffix);
+	free(prefix);
 	free(suffix);
 	free(tmp);
+	if (!ft_strcmp(name, "$?"))
+		free(value);
 	free(name);
 	return (final);
 }
@@ -77,45 +71,27 @@ char	*expand_string(char *s, char **envp, int last_status)
 	while (ft_strchr(res, '$'))
 	{
 		tmp = expand_one_var(res, envp, last_status);
+		if (!tmp || !ft_strcmp(tmp, res))
+		{
+			free(tmp);
+			break ;
+		}
 		free(res);
 		res = tmp;
 	}
 	return (res);
 }
 
-/*
- * Split an unquoted token on whitespace into multiple tokens.
- * Inserts new tokens into the linked list after the current token.
- * Does NOT modify the current token;
- * caller should skip already-processed tokens.
- */
 static void	split_token_on_whitespace(t_token *token)
 {
 	char	**words;
 	int		i;
-	int		word_count;
 	t_token	*new_token;
 	t_token	*current;
 
-	words = ft_split(token->str, ' ');
+	words = ft_split_charset(token->str, " \t\n");
 	if (!words || !words[0])
 	{
-		free(words);
-		return ;
-	}
-	word_count = 0;
-	while (words[word_count])
-		word_count++;
-	if (word_count <= 1)
-	{
-		if (word_count == 1)
-		{
-			free(token->str);
-			token->str = ft_strdup(words[0]);
-		}
-		i = 0;
-		while (words[i])
-			free(words[i++]);
 		free(words);
 		return ;
 	}
@@ -127,12 +103,7 @@ static void	split_token_on_whitespace(t_token *token)
 	{
 		new_token = token_new(words[i], WORD, DEFAULT);
 		if (!new_token)
-		{
-			for (; words[i]; i++)
-				free(words[i]);
-			free(words);
-			return ;
-		}
+			break ;
 		new_token->next = current->next;
 		if (current->next)
 			current->next->prev = new_token;
@@ -141,8 +112,9 @@ static void	split_token_on_whitespace(t_token *token)
 		current = new_token;
 		i++;
 	}
-	for (i = 0; words[i]; i++)
-		free(words[i]);
+	i = 0;
+	while (words[i])
+		free(words[i++]);
 	free(words);
 }
 
@@ -198,35 +170,33 @@ void	expand_commands(t_command *cmds, char **envp, int last_status)
 void	expand_tokens(t_token *tokens, char **envp, int last_status)
 {
 	t_token	*t;
+	t_token	*next;
 	char	*expanded;
 
 	t = tokens;
 	while (t)
 	{
+		next = t->next;
 		if ((t->type == WORD || t->type == VAR) && t->str)
 		{
-			if (t->status == SQUOTE)
-			{
-			}
-			else
+			if (t->status != SQUOTE)
 			{
 				expanded = expand_string(t->str, envp, last_status);
 				free(t->str);
 				t->str = expanded;
-				if (ft_strchr(t->str_backup, '$'))
-					t->var_exists = (t->str && *t->str);
 			}
-			if (t->type == VAR)
+			t->type = WORD;
+			t->status = DEFAULT;
+			if (!t->str || !*t->str)
 			{
-				t->type = WORD;
-				t->status = DEFAULT;
+				remove_token(&tokens, t);
+				t = next;
+				continue ;
 			}
 		}
-		if (t->status == DEFAULT && t->type == WORD && t->str
-			&& ft_strchr(t->str, ' '))
-		{
+		if (t->status == DEFAULT && t->type == WORD
+			&& t->str && has_whitespace(t->str))
 			split_token_on_whitespace(t);
-		}
 		t = t->next;
 	}
 }
