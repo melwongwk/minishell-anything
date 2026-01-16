@@ -70,7 +70,11 @@ static	int	create_children(t_data *data)
 		if (data->pid == -1)
 			return (errcmd_msg("fork", NULL, strerror(errno), EXIT_FAILURE));
 		else if (data->pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			create_children_helper(data, cmd, in);
+		}
 		if (cmd != data->cmd && in >= 0)
 			close(in);
 		if (cmd->next)
