@@ -56,6 +56,13 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status) && WTERSIG(status) == SIGINT)
+		{
+			close(fd[0]);
+			cmd->io_fds->fd_in = -1;
+			signal(SIGINT, SIG_DFL);
+			return ;
+		}
 		cmd->io_fds->fd_in = fd[0];
 		signal(SIGINT, SIG_DFL);
 	}
@@ -66,7 +73,10 @@ void	handle_heredocs(t_command *cmds, char **envp, int last_status)
 	while (cmds)
 	{
 		if (cmds->io_fds->heredoc_delimiter)
+		{
 			prepare_heredoc(cmds, envp, last_status);
+			if (cmd->io_fds->fd_in == -1)
+				return ;
 		cmds = cmds->next;
 	}
 }
