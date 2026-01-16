@@ -105,6 +105,11 @@ int	execute(t_data *data)
 {
 	int		ret;
 
+	if (data->cmd && data->cmd->io_fds && data->cmd->io_fds->fd_in == -1)
+	{
+		set_exit_status(data, 130);
+		return (130);
+	}
 	ret = prep_for_exec(data);
 	if (ret != CMD_NOT_FOUND)
 	{
