@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+volatile static sig_atomic_t	g_signal = 0;
+
+static void	sig_int_handler(int sig)
+{
+	g_signal = sig;
+	write(STDOUT_FILENO, "\n", 1);
+}
+
+void	init_signal(void)
+{
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
+
+	ft_bzero(&sa_int, sizef(sa_int);
+	ft_bzero(&sa_quit, sizef(sa_int);
+	sa_int.sa_handler = sig_int_handler;
+	sa_int.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa_int, NULL);
+	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_flags = 0;
+	sigaction(SIGQUIT, &sa_quit, NULL);
+}
+
 void	run_prompt(char **envp)
 {
 	t_data	*data;
@@ -27,6 +50,13 @@ void	run_prompt(char **envp)
 		{
 			printf("exit\n");
 			break ;
+		}
+		if (g_signal == SIGINT)
+		{
+			free(data->user_input);
+			data->user_input = NULL;
+			g_signal = 0;
+			continue ;
 		}
 		if (*data->user_input)
 			add_history(data->user_input);
