@@ -51,6 +51,7 @@ int	run_prompt(char **envp)
 	set_env_var(data, "?", "0");
 	while (1)
 	{
+		g_signal = 0;
 		data->user_input = readline("minishell:~$ ");
 		if (!data->user_input)
 		{
@@ -61,7 +62,6 @@ int	run_prompt(char **envp)
 		{
 			free(data->user_input);
 			data->user_input = NULL;
-			g_signal = 0;
 			continue ;
 		}
 		if (*data->user_input)
@@ -88,7 +88,9 @@ int	run_prompt(char **envp)
 		handle_heredocs(data->cmd, data->env, ft_atoi(get_env_var_value(data->env, "?")), data);
 		if (data->heredoc_interrupted)
 		{
+			set_exit_status(data, 130);
 			free_data(data, false);
+			data->heredoc_interrupted = false;
 			continue ;
 		}
 		execute(data);

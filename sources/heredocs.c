@@ -66,17 +66,19 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status, t_data *data)
 		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
 		waitpid(pid, &status, 0);
+		rl_on_new_line();
+		rl_replace_line("", 0);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		{
 			close(fd[0]);
 			cmd->io_fds->fd_in = -1;
 			data->heredoc_interrupted = true;
 			set_exit_status(data, 130);
-			signal(SIGINT, SIG_DFL);
+			init_signals();
 			return ;
 		}
 		cmd->io_fds->fd_in = fd[0];
-		signal(SIGINT, SIG_DFL);
+		init_signals();
 	}
 }
 
