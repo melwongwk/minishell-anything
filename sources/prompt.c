@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 18:02:11 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:13:21 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	run_prompt(char **envp)
 		join_tokens(data->token);
 		data->cmd = parse_commands(data->token);
 		handle_heredocs(data->cmd, data->env, 0);
+		// print_commands(data->cmd);
 		execute(data);
 		free_data(data, false); // must use with execute together to clean the data
 	}

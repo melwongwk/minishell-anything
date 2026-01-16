@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:44 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 18:29:47 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:20:24 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,6 @@ int	execute(t_data *data)
 {
 	int		ret;
 
-	if (data->cmd && data->cmd->io_fds && data->cmd->io_fds->fd_in == -1)
-	{
-		set_exit_status(data, 130);
-		return (130);
-	}
 	ret = prep_for_exec(data);
 	if (ret != CMD_NOT_FOUND)
 	{
