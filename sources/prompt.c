@@ -39,9 +39,10 @@ void	init_signals(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
-void	run_prompt(char **envp)
+int	run_prompt(char **envp)
 {
 	t_data	*data;
+	int		last_exit;
 
 	data = ft_calloc(1, sizeof(t_data));
 	data->env = dup_envp(envp);
@@ -91,7 +92,10 @@ void	run_prompt(char **envp)
 			continue ;
 		}
 		execute(data);
-		free_data(data, false); // must use with execute together to clean the data
+		free_data(data, false);
 	}
-	rl_clear_history();
+	last_exit = ft_atoi(get_env_var_value(data->env, "?"));
+	free_data(data, true);
+	free(data);
+	return (last_exit);
 }

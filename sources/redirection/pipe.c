@@ -14,13 +14,6 @@
 
 void	close_unused_pipe_fds(t_data *data, t_command *cmd)
 {
-	while (data->cmd)
-	{
-		if (data->cmd != cmd)
-		{
-			close(data->cmd->io_fds->fd_in);
-			close(data->cmd->io_fds->fd_out);
-		}
-		data->cmd = data->cmd->next;
-	}
+	(void)data;
+	(void)cmd;
 }

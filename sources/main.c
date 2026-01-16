@@ -17,6 +17,5 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_signals();
-	run_prompt(envp);
-	return (0);
+	return (run_prompt(envp));
 }

@@ -49,6 +49,7 @@ typedef struct s_io_fds
 	char	*heredoc_delimiter;
 	bool	heredoc_quotes;
 	bool	append;
+	bool	redir_error;
 	int		heredoc_fd;
 	int		fd_in;
 	int		fd_out;
@@ -101,7 +102,7 @@ enum e_quoting_status
 	DQUOTE
 };
 
-void		run_prompt(char **envp);
+int			run_prompt(char **envp);
 void		init_signals(void);
 
 int			is_redir(char c);

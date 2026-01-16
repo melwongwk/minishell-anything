@@ -47,6 +47,7 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 	t_token	*delim;
 	char	*joined;
 	char	*tmp;
+	int		delim_status;
 
 	cur = (*tok)->next;
 	while (cur && cur->type != WORD && cur->type != VAR)
@@ -57,19 +58,29 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 		return ;
 	}
 	delim = cur;
-	joined = ft_strdup(cur->str);
+	delim_status = delim->status;
 	cur = cur->next;
 	while (cur && cur->join)
+		cur = cur->next;
+	if (cmd->io_fds->redir_error)
+	{
+		*tok = cur;
+		return ;
+	}
+	joined = ft_strdup(delim->str);
+	delim = delim->next;
+	while (delim && delim->join)
 	{
 		tmp = joined;
-		joined = ft_strjoin(tmp, cur->str);
+		joined = ft_strjoin(tmp, delim->str);
 		free(tmp);
-		cur = cur->next;
+		delim = delim->next;
 	}
 	if ((*tok)->type == INPUT)
 	{
 		if (!open_infile(cmd->io_fds, joined))
 		{
+			cmd->io_fds->redir_error = true;
 			free(joined);
 			*tok = cur;
 			return ;
@@ -81,6 +92,7 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 	{
 		if (!open_outfile(cmd->io_fds, joined, false))
 		{
+			cmd->io_fds->redir_error = true;
 			free(joined);
 			*tok = cur;
 			return ;
@@ -93,6 +105,7 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 	{
 		if (!open_outfile(cmd->io_fds, joined, true))
 		{
+			cmd->io_fds->redir_error = true;
 			free(joined);
 			*tok = cur;
 			return ;
@@ -105,7 +118,7 @@ void	handle_redir_token(t_command *cmd, t_token **tok)
 	{
 		free_ptr(cmd->io_fds->heredoc_delimiter);
 		cmd->io_fds->heredoc_delimiter = joined;
-		cmd->io_fds->heredoc_quotes = (delim->status != DEFAULT);
+		cmd->io_fds->heredoc_quotes = (delim_status != DEFAULT);
 	}
 	*tok = cur;
 }

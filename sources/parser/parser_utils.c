@@ -30,6 +30,8 @@ t_command	*cmd_new(void)
 	cmd->io_fds->stdin_backup = -1;
 	cmd->io_fds->stdout_backup = -1;
 	cmd->io_fds->heredoc_fd = -1;
+	cmd->pipe_fd[0] = -1;
+	cmd->pipe_fd[1] = -1;
 	cmd->pipe_output = false;
 	return (cmd);
 }

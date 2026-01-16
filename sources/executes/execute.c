@@ -16,25 +16,28 @@ static int	get_children(t_data *data)
 {
 	pid_t	wpid;
 	int		status;
-	int		save_status;
+	int		last_status;
+	pid_t	last_pid;
 
 	close_fds(data->cmd, false);
-	save_status = 0;
-	wpid = 0;
+	last_status = 0;
+	last_pid = data->pid;
 	while (1)
 	{
 		wpid = waitpid(-1, &status, 0);
 		if (wpid <= 0)
 			break ;
-		save_status = status;
+		if (wpid == last_pid)
+		{
+			if (WIFSIGNALED(status))
+				last_status = 128 + WTERMSIG(status);
+			else if (WIFEXITED(status))
+				last_status = WEXITSTATUS(status);
+			else
+				last_status = status;
+		}
 	}
-	if (WIFSIGNALED(save_status))
-		status = 128 + WTERMSIG(save_status);
-	else if (WIFEXITED(save_status))
-		status = WEXITSTATUS(save_status);
-	else
-		status = save_status;
-	return (status);
+	return (last_status);
 }
 
 static	void	create_children_helper(t_data *data, t_command *cmd, int in)
@@ -51,6 +54,8 @@ static	void	create_children_helper(t_data *data, t_command *cmd, int in)
 		dup2(cmd->pipe_fd[1], STDOUT_FILENO);
 		close(cmd->pipe_fd[1]);
 	}
+	if (!check_infile_outfile(cmd->io_fds))
+		exit_shell(data, EXIT_FAILURE);
 	if (redirect_each_cmd_io(cmd->io_fds) == false)
 		exit_shell(data, EXIT_FAILURE);
 	execute_command(data, cmd);
@@ -102,6 +107,27 @@ static	int	prep_for_exec(t_data *data)
 	return (CMD_NOT_FOUND);
 }
 
+static int	is_builtin(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	return (0);
+}
+
 int	execute(t_data *data)
 {
 	int		ret;
@@ -112,18 +138,22 @@ int	execute(t_data *data)
 		set_exit_status(data, ret);
 		return (ret);
 	}
-	if (!data->cmd->pipe_output && !data->cmd->prev
-		&& check_infile_outfile(data->cmd->io_fds))
+	if (!data->cmd->pipe_output && !data->cmd->prev)
 	{
-		redirect_io(data->cmd->io_fds);
-		ret = execute_builtin(data, data->cmd);
-		if (restore_io(data->cmd->io_fds) == false)
+		if (!check_infile_outfile(data->cmd->io_fds))
+		{
+			set_exit_status(data, EXIT_FAILURE);
 			return (EXIT_FAILURE);
-	}
-	if (ret != CMD_NOT_FOUND)
-	{
-		set_exit_status(data, ret);
-		return (ret);
+		}
+		if (is_builtin(data->cmd->command))
+		{
+			redirect_io(data->cmd->io_fds);
+			ret = execute_builtin(data, data->cmd);
+			if (restore_io(data->cmd->io_fds) == false)
+				return (EXIT_FAILURE);
+			set_exit_status(data, ret);
+			return (ret);
+		}
 	}
 	ret = create_children(data);
 	set_exit_status(data, ret);

@@ -71,9 +71,9 @@ t_token	*lexer(char *input)
 
 	tokens = NULL;
 	i = 0;
+	had_space = true;
 	while (input[i])
 	{
-		had_space = false;
 		while (ft_isspace(input[i]))
 		{
 			had_space = true;
@@ -85,11 +85,13 @@ t_token	*lexer(char *input)
 		{
 			token_append(&tokens, token_new("|", PIPE, DEFAULT));
 			i++;
+			had_space = true;
 			continue ;
 		}
 		if (is_redir(input[i]))
 		{
 			handle_redirection(&tokens, input, &i);
+			had_space = true;
 			continue ;
 		}
 		seg = extract_segment(input, &i, &status, &is_var);
@@ -109,6 +111,7 @@ t_token	*lexer(char *input)
 			token_append(&tokens, new);
 		}
 		free(seg);
+		had_space = false;
 	}
 	return (tokens);
 }

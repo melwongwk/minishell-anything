@@ -99,7 +99,11 @@ int	redirect_each_cmd_io(t_io_fds *io)
 
 int	check_infile_outfile(t_io_fds *io_fds)
 {
-	if (!io_fds || (!io_fds->infile && !io_fds->outfile))
+	if (!io_fds)
+		return (1);
+	if (io_fds->redir_error)
+		return (0);
+	if (!io_fds->infile && !io_fds->outfile)
 		return (1);
 	if ((io_fds->infile && io_fds->fd_in == -1)
 		|| (io_fds->outfile && io_fds->fd_out == -1))
