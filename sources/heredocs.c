@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 22:20:59 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 12:59:31 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 15:29:26 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status)
 		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) && WTERSIG(status) == SIGINT)
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		{
 			close(fd[0]);
 			cmd->io_fds->fd_in = -1;
@@ -75,8 +75,9 @@ void	handle_heredocs(t_command *cmds, char **envp, int last_status)
 		if (cmds->io_fds->heredoc_delimiter)
 		{
 			prepare_heredoc(cmds, envp, last_status);
-			if (cmd->io_fds->fd_in == -1)
+			if (cmds->io_fds->fd_in == -1)
 				return ;
+		}
 		cmds = cmds->next;
 	}
 }

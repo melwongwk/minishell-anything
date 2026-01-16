@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:52 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 16:58:13 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:42:12 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	execute_command(t_data *data, t_command *cmd)
 		ret = execute_sys_bin(data, cmd);
 		if (ret != CMD_NOT_FOUND)
 			exit_shell(data, ret);
+		exit_shell(data, errcmd_msg(cmd->command, NULL,
+				"command not found", CMD_NOT_FOUND));
 	}
 	ret = execute_local_bin(data, cmd);
 	exit_shell(data, ret);

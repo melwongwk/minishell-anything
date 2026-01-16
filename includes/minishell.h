@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/15 18:56:15 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:45:52 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ typedef struct s_io_fds
 	int		fd_out;
 	int		stdin_backup;
 	int		stdout_backup;
+	char	**infiles;
+	char	**outfiles;
+	bool	*out_append;
+	bool	input_first;
 }			t_io_fds;
 
 typedef struct s_command
@@ -106,6 +110,7 @@ int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
+bool		has_unclosed_quote(char *input);
 void		handle_heredocs(t_command *cmds, char **envp, int last_status);
 char		*expand_string(char *s, char **envp, int last_status);
 char		**dup_envp(char **envp);
@@ -146,6 +151,7 @@ char		**get_paths_from_env(t_data *data);
 // file_io.c
 int			restore_io(t_io_fds *io);
 int			redirect_io(t_io_fds *io_fds);
+int			open_io_files(t_io_fds *io);
 int			check_infile_outfile(t_io_fds *io_fds);
 int			redirect_each_cmd_io(t_io_fds *io);
 // pipe.c

@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/15 18:18:28 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:39:30 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static void	sig_int_handler(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 }
 
-void	init_signal(void)
+void	init_signals(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
-	ft_bzero(&sa_int, sizef(sa_int);
-	ft_bzero(&sa_quit, sizef(sa_int);
+	ft_bzero(&sa_int, sizeof(sa_int));
+	ft_bzero(&sa_quit, sizeof(sa_quit));
 	sa_int.sa_handler = sig_int_handler;
 	sa_int.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa_int, NULL);
@@ -63,10 +63,15 @@ void	run_prompt(char **envp)
 		data->token = lexer(data->user_input);
 		if (!data->token)
 		{
-			printf("minishell: syntax error: unclosed quote\n");
+			if (has_unclosed_quote(data->user_input))
+			{
+				printf("minishell: syntax error: unclosed quote\n");
+				set_env_var(data, "?", "2");
+			}
 			free(data->user_input);
 			continue ;
 		}
+	/* debug: print_tokens(data->token); */
 		if (!check_syntax(data->token))
 		{
 			printf("syntax error\n");
@@ -79,6 +84,7 @@ void	run_prompt(char **envp)
 		expand_tokens(data->token, data->env, 0);
 		join_tokens(data->token);
 		data->cmd = parse_commands(data->token);
+		// print_commands(data->cmd);
 		handle_heredocs(data->cmd, data->env, 0);
 		execute(data);
 		free_data(data, false); // must use with execute together to clean the data

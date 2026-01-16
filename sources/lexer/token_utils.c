@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 08:14:32 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 12:58:18 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:29:29 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ void	join_tokens(t_token *tokens)
 	cur = tokens;
 	while (cur && cur->next)
 	{
-		if (cur->next->join)
+		if (cur->next->join && cur->type == WORD
+			&& (cur->next->type == WORD || cur->next->type == VAR))
 		{
 			next = cur->next;
 			if (cur->str)

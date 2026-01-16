@@ -6,11 +6,26 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 22:49:35 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:05:13 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:50:59 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	should_skip_token(t_token *tok)
+{
+	if (!tok->str || !tok->str[0])
+	{
+		if (tok->status == SQUOTE || tok->status == DQUOTE)
+			return (0);
+		return (1);
+	}
+	if (tok->status != SQUOTE && tok->status != DQUOTE
+		&& tok->str_backup && ft_strchr(tok->str_backup, '$')
+		&& !tok->var_exists)
+		return (1);
+	return (0);
+}
 
 static int	count_args(t_token *tok)
 {
@@ -23,15 +38,11 @@ static int	count_args(t_token *tok)
 			|| tok->type == APPEND || tok->type == HEREDOC)
 		{
 			tok = tok->next;
-			while (tok && tok->join)
-				tok = tok->next;
 			if (tok)
 				tok = tok->next;
-			else
-				tok = NULL;
 			continue ;
 		}
-		if (tok->type == WORD)
+		if (tok->type == WORD && !should_skip_token(tok))
 			count++;
 		tok = tok->next;
 	}
@@ -56,7 +67,7 @@ static void	fill_args(t_command *cmd, t_token **tok)
 			handle_redir_token(cmd, &tmp);
 			continue ;
 		}
-		if (tmp->type == WORD)
+		if (tmp->type == WORD && !should_skip_token(tmp))
 		{
 			cmd->args[i++] = ft_strdup(tmp->str);
 			if (!cmd->command)

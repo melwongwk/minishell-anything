@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:11 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 16:58:31 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 16:39:31 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ void	free_io(t_io_fds *io)
 		free_ptr(io->infile);
 	if (io->outfile)
 		free_ptr(io->outfile);
+	if (io->infiles)
+		free_str_tab(io->infiles);
+	if (io->outfiles)
+		free_str_tab(io->outfiles);
+	if (io->out_append)
+		free(io->out_append);
 	if (io)
 		free(io);
 }

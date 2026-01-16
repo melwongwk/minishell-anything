@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 21:06:13 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/14 13:00:56 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/16 15:44:24 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ static char	*extract_segment(char *s, int *i, int *status, bool *is_var)
 
 t_token	*lexer(char *input)
 {
+	if (!input)
+		return (NULL);
+	/* debug: printf("[DEBUG] lexer input: '%s'\n", input); */
 	t_token	*tokens;
 	int		i;
 	bool	had_space;
