@@ -42,7 +42,6 @@ static int	get_children(t_data *data)
 
 static	void	create_children_helper(t_data *data, t_command *cmd, int in)
 {
-	close_unused_pipe_fds(data, cmd);
 	if (cmd != data->cmd && in >= 0)
 	{
 		dup2(in, STDIN_FILENO);
