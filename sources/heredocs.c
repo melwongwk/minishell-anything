@@ -20,6 +20,8 @@ void	prepare_heredoc(t_command *cmd, char **envp, int last_status, t_data *data)
 	char	*line;
 	char	*expanded;
 
+	if (!cmd->io_fds->heredoc_delimiter)
+		return ;
 	if (pipe(fd) == -1)
 		return ;
 	pid = fork();
