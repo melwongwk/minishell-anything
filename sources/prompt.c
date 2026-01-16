@@ -25,8 +25,8 @@ void	init_signal(void)
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
-	ft_bzero(&sa_int, sizef(sa_int);
-	ft_bzero(&sa_quit, sizef(sa_int);
+	ft_bzero(&sa_int, sizeof(sa_int));
+	ft_bzero(&sa_quit, sizeof(sa_int));
 	sa_int.sa_handler = sig_int_handler;
 	sa_int.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa_int, NULL);
