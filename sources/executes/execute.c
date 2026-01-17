@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:44 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/16 18:20:24 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 13:49:37 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static int	get_children(t_data *data)
 
 static	void	create_children_helper(t_data *data, t_command *cmd, int in)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (cmd != data->cmd && in >= 0)
 	{
 		dup2(in, STDIN_FILENO);
@@ -75,11 +77,7 @@ static	int	create_children(t_data *data)
 		if (data->pid == -1)
 			return (errcmd_msg("fork", NULL, strerror(errno), EXIT_FAILURE));
 		else if (data->pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
 			create_children_helper(data, cmd, in);
-		}
 		if (cmd != data->cmd && in >= 0)
 			close(in);
 		if (cmd->next)
@@ -106,27 +104,6 @@ static	int	prep_for_exec(t_data *data)
 	return (CMD_NOT_FOUND);
 }
 
-static int	is_builtin(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (ft_strncmp(cmd, "cd", 3) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "echo", 5) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "env", 4) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "export", 7) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "pwd", 4) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "unset", 6) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "exit", 5) == 0)
-		return (1);
-	return (0);
-}
-
 int	execute(t_data *data)
 {
 	int		ret;
@@ -140,10 +117,7 @@ int	execute(t_data *data)
 	if (!data->cmd->pipe_output && !data->cmd->prev)
 	{
 		if (!check_infile_outfile(data->cmd->io_fds))
-		{
-			set_exit_status(data, EXIT_FAILURE);
-			return (EXIT_FAILURE);
-		}
+			return (set_exit_status(data, EXIT_FAILURE), EXIT_FAILURE);
 		if (is_builtin(data->cmd->command))
 		{
 			redirect_io(data->cmd->io_fds);

@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:49 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/14 14:17:42 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 13:49:48 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,25 @@ int	check_command_found(t_command *cmd)
 		return (errcmd_msg(cmd->command,
 				NULL, strerror(errno), CMD_NOT_EXECUTABLE));
 	return (EXIT_SUCCESS);
+}
+
+int	is_builtin(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	return (0);
 }

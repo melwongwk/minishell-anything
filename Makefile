@@ -6,7 +6,7 @@
 #    By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/06 19:01:56 by melwong           #+#    #+#              #
-#    Updated: 2026/01/15 19:13:18 by hho-jia-         ###   ########.fr        #
+#    Updated: 2026/01/17 13:14:57 by hho-jia-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/parser_utils.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redirections.c \
+					$(SRC_DIR)/parser/redirection_utils.c \
 					$(SRC_DIR)/parser/expansion.c \
 					$(SRC_DIR)/builtins/cd_builtin.c \
 					$(SRC_DIR)/builtins/echo_builtin.c \

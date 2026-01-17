@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/17 12:07:25 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 13:51:46 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_io_fds
 	char	*outfile;
 	char	*heredoc_delimiter;
 	bool	heredoc_quotes;
-	bool	append;
 	bool	redir_error;
 	int		heredoc_fd;
 	int		fd_in;
@@ -130,6 +129,12 @@ void		handle_redir_token(t_command *cmd, t_token **tok);
 void		expand_commands(t_command *cmds, char **envp, int last_status);
 char		*env_get(char **envp, const char *key);
 void		expand_tokens(t_token *tokens, char **envp, int last_status);
+// redirection_utils.c
+int			open_outfile(t_io_fds *io, char *filename, bool append);
+int			open_infile(t_io_fds *io, char *filename);
+char		*build_filename(t_token *delim);
+t_token		*find_and_advance_tokens(t_token **tok,
+				t_command *cmd, int *delim_status);
 
 // Howard
 // execute folder
@@ -139,6 +144,7 @@ void		execute_command(t_data *data, t_command *cmd);
 // execute_utils.c
 int			check_command_found(t_command *cmd);
 int			cmd_is_dir(char *cmd);
+int			is_builtin(char *cmd);
 // execute.c
 int			execute(t_data *data);
 // parse_path.c
