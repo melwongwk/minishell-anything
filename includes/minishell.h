@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 17:47:39 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 12:07:25 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ int			is_redir(char c);
 void		handle_redirection(t_token **tokens, char *input, int *i);
 char		*extract_var(char *s, int *i);
 bool		check_syntax(t_token *token);
-void		handle_heredocs(t_command *cmds, char **envp, int last_status, t_data *data);
+void		handle_heredocs(t_command *cmds,
+				char **envp, int last_status, t_data *data);
 char		*expand_string(char *s, char **envp, int last_status);
 char		**dup_envp(char **envp);
 

@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:04:11 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 16:58:31 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 12:05:21 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ void	free_data(t_data *data, int clear_history)
 		data->user_input = NULL;
 	}
 	if (data && data->token)
+	{
 		clear_token(data);
+		data->token = NULL;
+	}
 	if (data && data->cmd)
+	{
 		clear_cmd(data);
+		data->cmd = NULL;
+	}
 	if (clear_history == true)
 	{
 		if (data && data->working_dir)

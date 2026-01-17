@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:10:46 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 19:45:35 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 12:05:21 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ void	init_signals(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
+static int	has_content(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isspace(str[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	run_prompt(char **envp)
 {
 	t_data	*data;
@@ -69,7 +83,8 @@ int	run_prompt(char **envp)
 		data->token = lexer(data->user_input);
 		if (!data->token)
 		{
-			printf("minishell: syntax error: unclosed quote\n");
+			if (has_content(data->user_input))
+				printf("minishell: syntax error: unclosed quote\n");
 			free(data->user_input);
 			continue ;
 		}
