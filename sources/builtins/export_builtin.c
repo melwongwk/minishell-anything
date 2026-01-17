@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:26 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 18:41:55 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/17 16:56:53 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,44 @@ static int	handle_export_arg(t_data *data, char *arg)
 	return (ret);
 }
 
+static void	export_builtin_helper(t_data *data, char *eachenv, int i)
+{
+	char	*tmp;
+	char	*key;
+	char	*value;
+	char	*equals;
+
+	equals = ft_strchr(data->env[i], '=');
+	parse_export_arg(eachenv, &key, &value, &equals);
+	tmp = ft_strjoin("declare -x ", key);
+	free(key);
+	key = ft_strjoin(tmp, "=\"");
+	free(tmp);
+	tmp = ft_strjoin(key, value);
+	free(value);
+	free(key);
+	key = ft_strjoin(tmp, "\"");
+	ft_putendl_fd(key, STDOUT_FILENO);
+	free(tmp);
+	free(key);
+}
+
+static int	export_env_builtin(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	if (!data->env)
+		return (EXIT_FAILURE);
+	while (data->env[i])
+	{
+		if (ft_strncmp(data->env[i], "?=", 2) != 0)
+			export_builtin_helper(data, data->env[i], i);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	export_builtin(t_data *data, char **args)
 {
 	int		i;
@@ -62,7 +100,7 @@ int	export_builtin(t_data *data, char **args)
 	ret = EXIT_SUCCESS;
 	i = 1;
 	if (!args[i])
-		return (env_builtin(data, NULL));
+		return (export_env_builtin(data));
 	while (args[i])
 	{
 		if (handle_export_arg(data, args[i]) != EXIT_SUCCESS)
