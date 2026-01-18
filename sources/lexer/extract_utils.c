@@ -18,7 +18,8 @@ char	*handle_variable(char *s, int *i, int *status, bool *is_var)
 
 	start = *i;
 	*is_var = true;
-	if (s[*i + 1] == '?')
+	(*i)++;
+	if (s[*i] == '?')
 		(*i)++;
 	else
 		while (ft_isalnum(s[*i]) || s[*i] == '_')
