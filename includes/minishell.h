@@ -105,71 +105,70 @@ enum e_quoting_status
  * Prompt & Initialization
  * =========================== */
 
-int         run_prompt(char **envp);
-t_data      *init_prompt_data(char **envp);
-int         parse_and_prepare(t_data *data);
-void        init_signals(void);
+int			run_prompt(char **envp);
+t_data		*init_prompt_data(char **envp);
+int			parse_and_prepare(t_data *data);
+void		init_signals(void);
 
 /* ===========================
  * Environment & Expansion
  * =========================== */
 
-char        **dup_envp(char **envp);
-char        *env_get(char **envp, const char *key);
-char        *extract_var(char *s, int *i);
-char        *expand_string(char *s, char **envp, int last_status);
-char        *expand_one_var(char *s, char **envp, int last_status);
-void        expand_tokens(t_token *tokens, char **envp, int last_status);
+char		**dup_envp(char **envp);
+char		*env_get(char **envp, const char *key);
+char		*extract_var(char *s, int *i);
+char		*expand_string(char *s, char **envp, int last_status);
+char		*expand_one_var(char *s, char **envp, int last_status);
+void		expand_tokens(t_token *tokens, char **envp, int last_status);
 
 /* ===========================
  * Token Handling (words, vars, quotes)
  * =========================== */
 
-char        *handle_variable(char *s, int *i, int *status, bool *is_var);
-char        *handle_quotes(char *s, int *i, int *status);
-char        *handle_word(char *s, int *i, int *status);
+char		*handle_variable(char *s, int *i, int *status, bool *is_var);
+char		*handle_quotes(char *s, int *i, int *status);
+char		*handle_word(char *s, int *i, int *status);
 
 /* ===========================
  * Redirection & Heredocs
  * =========================== */
 
-int         is_redir(char c);
-void        handle_redirection(t_token **tokens, char *input, int *i);
-void        handle_redir_token(t_command *cmd, t_token **tok);
-void        handle_heredocs(t_command *cmds,
-                char **envp, int last_status, t_data *data);
-int         handle_heredoc_interrupt(t_data *data);
-void        heredoc_child(t_command *cmd, char **envp, int last_status,
-                int write_fd);
-void        heredoc_parent(pid_t pid, t_command *cmd, t_data *data, int fd[2]);
+int			is_redir(char c);
+void		handle_redirection(t_token **tokens, char *input, int *i);
+void		handle_redir_token(t_command *cmd, t_token **tok);
+void		handle_heredocs(t_command *cmds,
+				char **envp, int last_status, t_data *data);
+int			handle_heredoc_interrupt(t_data *data);
+void		heredoc_child(t_command *cmd, char **envp, int last_status,
+				int write_fd);
+void		heredoc_parent(pid_t pid, t_command *cmd, t_data *data, int fd[2]);
 
 /* ===========================
  * Syntax Checking
  * =========================== */
 
-bool        check_syntax(t_token *token);
-int         has_whitespace(char *s);
-
+bool		check_syntax(t_token *token);
+int			has_whitespace(char *s);
 /* ===========================
  * Lexer
  * =========================== */
 
-t_token     *token_new(const char *s, int type, int status);
-void        token_append(t_token **head, t_token *node);
-void        free_tokens(t_token *tok);
-void        remove_token(t_token **head, t_token *t);
-void        join_tokens(t_token *tokens);
-t_token     *parse_token(char *input, int *i);
-void        skip_whitespace(const char *input, int *i, bool *had_space);
-t_token     *lexer(char *input);
+t_token		*token_new(const char *s, int type, int status);
+void		token_append(t_token **head, t_token *node);
+void		free_tokens(t_token *tok);
+void		remove_token(t_token **head, t_token *t);
+void		join_tokens(t_token *tokens);
+t_token		*parse_token(char *input, int *i);
+void		skip_whitespace(const char *input, int *i, bool *had_space);
+t_token		*lexer(char *input);
 
 /* ===========================
  * Parser
  * =========================== */
 
-t_command   *cmd_new(void);
-t_command   *parse_commands(t_token *tokens);
-void        split_token_on_whitespace(t_token *token);
+t_command	*cmd_new(void);
+t_command	*parse_commands(t_token *tokens);
+void		split_token_on_whitespace(t_token *token);
 
 // redirection_utils.c
 int			open_outfile(t_io_fds *io, char *filename, bool append);

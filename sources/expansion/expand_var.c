@@ -38,7 +38,7 @@ static char	*get_variable_name(char *s, int i)
 	return (ft_strndup(s + i, len + 1));
 }
 
-static char *get_variable_value(char **envp, char *name, int last_status)
+static char	*get_variable_value(char **envp, char *name, int last_status)
 {
 	if (ft_strcmp(name, "$?") == 0)
 		return (ft_itoa(last_status));
