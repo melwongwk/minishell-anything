@@ -12,51 +12,47 @@
 
 #include "minishell.h"
 
-static char	*extract_segment(char *s, int *i, int *status, bool *is_var)
+static void	handle_pipe(t_token **tokens, int *i)
 {
-	int		start;
-	char	q;
-	char	*out;
+	token_append(tokens, token_new("|", PIPE, DEFAULT));
+	(*i)++;
+}
 
-	*is_var = false;
-	if (s[*i] == '$')
+static bool	handle_special_tokens(char *input, int *i, t_token **tokens)
+{
+	if (input[*i] == '|')
 	{
-		start = (*i)++;
-		if (s[*i] == '?')
-			(*i)++;
-		else
-			while (ft_isalnum(s[*i]) || s[*i] == '_')
-				(*i)++;
-		*status = DEFAULT;
-		*is_var = true;
-		return (ft_strndup(s + start, *i - start));
+		handle_pipe(tokens, i);
+		return (true);
 	}
-	if (s[*i] == '\'' || s[*i] == '"')
+	if (is_redir(input[*i]))
 	{
-		q = s[*i];
-		if (q == '\'')
-			*status = SQUOTE;
-		else
-			*status = DQUOTE;
-		start = ++(*i);
-		while (s[*i] && s[*i] != q)
-			(*i)++;
-		out = ft_strndup(s + start, *i - start);
-		if (s[*i] == q)
-			(*i)++;
-		else
-		{
-			free(out);
-			return (NULL);
-		}
-		return (out);
+		handle_redirection(tokens, input, i);
+		return (true);
 	}
-	start = *i;
-	*status = DEFAULT;
-	while (s[*i] && !ft_isspace(s[*i]) && !is_redir(s[*i])
-		&& s[*i] != '|' && s[*i] != '$' && s[*i] != '\'' && s[*i] != '"')
-		(*i)++;
-	return (ft_strndup(s + start, *i - start));
+	return (false);
+}
+
+static void	init_lexer_variables(t_token **tokens, int *i, bool *had_space)
+{
+	*tokens = NULL;
+	*i = 0;
+	*had_space = true;
+}
+
+static void	process_token(char *input, int *i,
+				bool *had_space, t_token **tokens)
+{
+	t_token	*new;
+
+	new = parse_token(input, i);
+	if (new)
+	{
+		if (!*had_space)
+			new->join = true;
+		token_append(tokens, new);
+	}
+	*had_space = false;
 }
 
 t_token	*lexer(char *input)
@@ -64,54 +60,19 @@ t_token	*lexer(char *input)
 	t_token	*tokens;
 	int		i;
 	bool	had_space;
-	int		status;
-	bool	is_var;
-	char	*seg;
-	t_token	*new;
 
-	tokens = NULL;
-	i = 0;
-	had_space = true;
+	init_lexer_variables(&tokens, &i, &had_space);
 	while (input[i])
 	{
-		while (ft_isspace(input[i]))
-		{
-			had_space = true;
-			i++;
-		}
+		skip_whitespace(input, &i, &had_space);
 		if (!input[i])
 			break ;
-		if (input[i] == '|')
+		if (handle_special_tokens(input, &i, &tokens))
 		{
-			token_append(&tokens, token_new("|", PIPE, DEFAULT));
-			i++;
 			had_space = true;
 			continue ;
 		}
-		if (is_redir(input[i]))
-		{
-			handle_redirection(&tokens, input, &i);
-			had_space = true;
-			continue ;
-		}
-		seg = extract_segment(input, &i, &status, &is_var);
-		if (!seg)
-		{
-			free_tokens(tokens);
-			return (NULL);
-		}
-		if (*seg)
-		{
-			if (is_var)
-				new = token_new(seg, VAR, status);
-			else
-				new = token_new(seg, WORD, status);
-			if (!had_space)
-				new->join = true;
-			token_append(&tokens, new);
-		}
-		free(seg);
-		had_space = false;
+		process_token(input, &i, &had_space, &tokens);
 	}
 	return (tokens);
 }

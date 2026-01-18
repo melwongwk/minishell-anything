@@ -22,25 +22,27 @@ static int	find_dollar(const char *s)
 	return (i);
 }
 
-static char	*get_var_value(char *s, int i, char **envp,
-						int last_status, char **name)
+static char	*get_variable_name(char *s, int i)
 {
-	int	start;
-	int	len;
+	int		start;
+	int		len;
 
 	if (s[i + 1] == '?')
-	{
-		*name = ft_strdup("$?");
-		return (ft_itoa(last_status));
-	}
+		return (ft_strdup("$?"));
 	if (!s[i + 1] || (!ft_isalnum(s[i + 1]) && s[i + 1] != '_'))
 		return (NULL);
 	start = i + 1;
 	len = 0;
 	while (ft_isalnum(s[start + len]) || s[start + len] == '_')
 		len++;
-	*name = ft_strndup(s + i, len + 1);
-	return (env_get(envp, *name + 1));
+	return (ft_strndup(s + i, len + 1));
+}
+
+static char *get_variable_value(char **envp, char *name, int last_status)
+{
+	if (ft_strcmp(name, "$?") == 0)
+		return (ft_itoa(last_status));
+	return (env_get(envp, name + 1));
 }
 
 static char	*build_expanded(char *s, int i, char *name, char *value)
@@ -70,11 +72,12 @@ char	*expand_one_var(char *s, char **envp, int last_status)
 	i = find_dollar(s);
 	if (!s[i])
 		return (ft_strdup(s));
-	value = get_var_value(s, i, envp, last_status, &name);
+	name = get_variable_name(s, i);
+	if (!name)
+		return (ft_strdup(s));
+	value = get_variable_value(envp, name, last_status);
 	if (!value)
 		return (ft_strdup(s));
-	if (!value)
-		value = "";
 	result = build_expanded(s, i, name, value);
 	if (!ft_strcmp(name, "$?"))
 		free(value);
