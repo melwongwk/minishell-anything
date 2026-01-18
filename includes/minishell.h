@@ -119,7 +119,7 @@ char		*env_get(char **envp, const char *key);
 char		*extract_var(char *s, int *i);
 char		*expand_string(char *s, char **envp, int last_status);
 char		*expand_one_var(char *s, char **envp, int last_status);
-void		expand_tokens(t_token *tokens, char **envp, int last_status);
+void		expand_tokens(t_token **tokens, char **envp, int last_status);
 
 /* ===========================
  * Token Handling (words, vars, quotes)

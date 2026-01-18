@@ -77,9 +77,9 @@ char	*expand_one_var(char *s, char **envp, int last_status)
 		return (ft_strdup(s));
 	value = get_variable_value(envp, name, last_status);
 	if (!value)
-		return (ft_strdup(s));
+		value = ft_strdup("");
 	result = build_expanded(s, i, name, value);
-	if (!ft_strcmp(name, "$?"))
+	if (!ft_strcmp(name, "$?") || value[0] == '\0')
 		free(value);
 	free(name);
 	return (result);

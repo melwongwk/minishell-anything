@@ -51,20 +51,22 @@ static int	post_expand_cleanup(t_token **tokens, t_token *t, int orig_status)
 	return (0);
 }
 
-void	expand_tokens(t_token *tokens, char **envp, int last_status)
+void	expand_tokens(t_token **tokens, char **envp, int last_status)
 {
 	t_token	*t;
 	t_token	*next;
 	int		orig_status;
 
-	t = tokens;
+	if (!tokens || !*tokens)
+		return ;
+	t = *tokens;
 	while (t)
 	{
 		next = t->next;
 		orig_status = t->status;
 		if ((t->type == WORD || t->type == VAR) && should_expand_token(t))
 			expand_token_str(t, envp, last_status);
-		if (post_expand_cleanup(&tokens, t, orig_status))
+		if (post_expand_cleanup(tokens, t, orig_status))
 		{
 			t = next;
 			continue ;

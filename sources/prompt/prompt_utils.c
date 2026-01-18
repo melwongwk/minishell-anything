@@ -53,13 +53,14 @@ int	parse_and_prepare(t_data *data)
 	if (!check_syntax(data->token))
 	{
 		printf("syntax error\n");
+		set_env_var(data, "?", "2");
 		free_tokens(data->token);
 		free(data->user_input);
 		data->token = NULL;
 		data->user_input = NULL;
 		return (1);
 	}
-	expand_tokens(data->token, data->env,
+	expand_tokens(&data->token, data->env,
 		ft_atoi(get_env_var_value(data->env, "?")));
 	join_tokens(data->token);
 	data->cmd = parse_commands(data->token);
