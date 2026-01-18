@@ -68,6 +68,7 @@ char	*expand_one_var(char *s, char **envp, int last_status)
 	char	*name;
 	char	*value;
 	char	*result;
+	int		free_value;
 
 	i = find_dollar(s);
 	if (!s[i])
@@ -76,10 +77,16 @@ char	*expand_one_var(char *s, char **envp, int last_status)
 	if (!name)
 		return (ft_strdup(s));
 	value = get_variable_value(envp, name, last_status);
+	free_value = 0;
 	if (!value)
+	{
 		value = ft_strdup("");
+		free_value = 1;
+	}
 	result = build_expanded(s, i, name, value);
-	if (!ft_strcmp(name, "$?") || value[0] == '\0')
+	if (!ft_strcmp(name, "$?"))
+		free_value = 1;
+	if (free_value)
 		free(value);
 	free(name);
 	return (result);

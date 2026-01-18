@@ -41,6 +41,7 @@ void	remove_token(t_token **head, t_token *t)
 	if (t->next)
 		t->next->prev = t->prev;
 	free(t->str);
+	free(t->str_backup);
 	free(t);
 }
 
