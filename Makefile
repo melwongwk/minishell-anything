@@ -6,7 +6,7 @@
 #    By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/06 19:01:56 by melwong           #+#    #+#              #
-#    Updated: 2026/01/17 13:14:57 by hho-jia-         ###   ########.fr        #
+#    Updated: 2026/01/18 08:08:08 by melwong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/prompt/prompt_utils.c \
 					$(SRC_DIR)/heredocs/heredocs.c \
 					$(SRC_DIR)/heredocs/heredocs_utils.c \
-					$(SRC_DIR)/lexer/token_utils.c \
+					$(SRC_DIR)/tokenize/token.c \
+					$(SRC_DIR)/tokenize/token_utils.c \
 					$(SRC_DIR)/lexer/lexer.c \
 					$(SRC_DIR)/lexer/lexer_utils.c \
 					$(SRC_DIR)/parser/parser_utils.c \
