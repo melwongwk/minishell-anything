@@ -32,6 +32,8 @@ void	heredoc_child(t_command *cmd, char **envp, int last_status,
 	char	*line;
 
 	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, SIG_IGN);
 	while (1)
 	{
 		line = readline("> ");

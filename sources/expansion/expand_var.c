@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-static int	find_dollar(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != '$')
-		i++;
-	return (i);
-}
-
 static char	*get_variable_name(char *s, int i)
 {
 	int		start;
@@ -62,6 +52,19 @@ static char	*build_expanded(char *s, int i, char *name, char *value)
 	return (final);
 }
 
+static char	*normalize_value(char *value, char *name, int *free_value)
+{
+	*free_value = 0;
+	if (!value)
+	{
+		value = ft_strdup("");
+		*free_value = 1;
+	}
+	if (!ft_strcmp(name, "$?"))
+		*free_value = 1;
+	return (value);
+}
+
 char	*expand_one_var(char *s, char **envp, int last_status)
 {
 	int		i;
@@ -77,12 +80,7 @@ char	*expand_one_var(char *s, char **envp, int last_status)
 	if (!name)
 		return (ft_strdup(s));
 	value = get_variable_value(envp, name, last_status);
-	free_value = 0;
-	if (!value)
-	{
-		value = ft_strdup("");
-		free_value = 1;
-	}
+	value = normalize_value(value, name, &free_value);
 	result = build_expanded(s, i, name, value);
 	if (!ft_strcmp(name, "$?"))
 		free_value = 1;

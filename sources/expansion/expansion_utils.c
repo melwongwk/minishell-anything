@@ -82,3 +82,13 @@ void	split_token_on_whitespace(t_token *token)
 	insert_split_tokens(token, words);
 	free_words(words);
 }
+
+int	find_dollar(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '$')
+		i++;
+	return (i);
+}
