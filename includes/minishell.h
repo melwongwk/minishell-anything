@@ -149,6 +149,7 @@ void		heredoc_parent(pid_t pid, t_command *cmd, t_data *data, int fd[2]);
 
 bool		check_syntax(t_token *token);
 int			has_whitespace(char *s);
+
 /* ===========================
  * Lexer
  * =========================== */
