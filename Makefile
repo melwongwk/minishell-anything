@@ -33,9 +33,11 @@ RESET			=	\033[0m
 
 INC				=	$(INC_DIR)/minishell.h
 SRCS			=	$(SRC_DIR)/main.c \
-					$(SRC_DIR)/prompt.c \
 					$(SRC_DIR)/validation.c \
-					$(SRC_DIR)/heredocs.c \
+					$(SRC_DIR)/prompt/prompt.c \
+					$(SRC_DIR)/prompt/prompt_utils.c \
+					$(SRC_DIR)/heredocs/heredocs.c \
+					$(SRC_DIR)/heredocs/heredocs_utils.c \
 					$(SRC_DIR)/lexer/token_utils.c \
 					$(SRC_DIR)/lexer/lexer.c \
 					$(SRC_DIR)/lexer/lexer_utils.c \
@@ -43,7 +45,9 @@ SRCS			=	$(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redirections.c \
 					$(SRC_DIR)/parser/redirection_utils.c \
-					$(SRC_DIR)/parser/expansion.c \
+					$(SRC_DIR)/expansion/expansion.c \
+					$(SRC_DIR)/expansion/expansion_utils.c \
+					$(SRC_DIR)/expansion/expand_var.c \
 					$(SRC_DIR)/builtins/cd_builtin.c \
 					$(SRC_DIR)/builtins/echo_builtin.c \
 					$(SRC_DIR)/builtins/env_builtin.c \

@@ -111,7 +111,15 @@ bool		check_syntax(t_token *token);
 void		handle_heredocs(t_command *cmds,
 				char **envp, int last_status, t_data *data);
 char		*expand_string(char *s, char **envp, int last_status);
+char		*expand_one_var(char *s, char **envp, int last_status);
+void		split_token_on_whitespace(t_token *token);
 char		**dup_envp(char **envp);
+t_data		*init_prompt_data(char **envp);
+int			parse_and_prepare(t_data *data);
+int			handle_heredoc_interrupt(t_data *data);
+void		heredoc_child(t_command *cmd, char **envp, int last_status,
+				int write_fd);
+void		heredoc_parent(pid_t pid, t_command *cmd, t_data *data, int fd[2]);
 
 /* lexer */
 t_token		*token_new(const char *s, int type, int status);
@@ -126,9 +134,10 @@ t_command	*parse_commands(t_token *tokens);
 t_command	*cmd_new(void);
 int			has_whitespace(char *s);
 void		handle_redir_token(t_command *cmd, t_token **tok);
-void		expand_commands(t_command *cmds, char **envp, int last_status);
 char		*env_get(char **envp, const char *key);
 void		expand_tokens(t_token *tokens, char **envp, int last_status);
+void		split_token_on_whitespace(t_token *token);
+
 // redirection_utils.c
 int			open_outfile(t_io_fds *io, char *filename, bool append);
 int			open_infile(t_io_fds *io, char *filename);

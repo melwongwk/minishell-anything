@@ -39,80 +39,50 @@ void	init_signals(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
-static int	has_content(char *str)
+static int	read_prompt_input(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	g_signal = 0;
+	data->user_input = readline("minishell:~$ ");
+	if (!data->user_input)
 	{
-		if (!ft_isspace(str[i]))
-			return (1);
-		i++;
+		printf("exit\n");
+		return (0);
 	}
-	return (0);
+	if (g_signal == SIGINT)
+	{
+		free(data->user_input);
+		data->user_input = NULL;
+		return (1);
+	}
+	if (*data->user_input)
+		add_history(data->user_input);
+	return (2);
 }
 
 int	run_prompt(char **envp)
 {
 	t_data	*data;
-	int		last_exit;
+	int		status;
 
-	data = ft_calloc(1, sizeof(t_data));
-	data->env = dup_envp(envp);
-	data->interactive = true;
-	data->heredoc_interrupted = false;
-	set_env_var(data, "?", "0");
+	data = init_prompt_data(envp);
+	if (!data)
+		return (EXIT_FAILURE);
 	while (1)
 	{
-		g_signal = 0;
-		data->user_input = readline("minishell:~$ ");
-		if (!data->user_input)
-		{
-			printf("exit\n");
+		status = read_prompt_input(data);
+		if (status == 0)
 			break ;
-		}
-		if (g_signal == SIGINT)
-		{
-			free(data->user_input);
-			data->user_input = NULL;
+		else if (status == 1)
 			continue ;
-		}
-		if (*data->user_input)
-			add_history(data->user_input);
-		data->token = lexer(data->user_input);
-		if (!data->token)
-		{
-			if (has_content(data->user_input))
-				printf("minishell: syntax error: unclosed quote\n");
-			free(data->user_input);
+		if (parse_and_prepare(data))
 			continue ;
-		}
-		if (!check_syntax(data->token))
-		{
-			printf("syntax error\n");
-			free_tokens(data->token);
-			free(data->user_input);
-			data->token = NULL;
-			data->user_input = NULL;
+		if (handle_heredoc_interrupt(data))
 			continue ;
-		}
-		expand_tokens(data->token, data->env, ft_atoi(get_env_var_value(data->env, "?")));
-		join_tokens(data->token);
-		data->cmd = parse_commands(data->token);
-		handle_heredocs(data->cmd, data->env, ft_atoi(get_env_var_value(data->env, "?")), data);
-		if (data->heredoc_interrupted)
-		{
-			set_exit_status(data, 130);
-			free_data(data, false);
-			data->heredoc_interrupted = false;
-			continue ;
-		}
 		execute(data);
 		free_data(data, false);
 	}
-	last_exit = ft_atoi(get_env_var_value(data->env, "?"));
+	status = ft_atoi(get_env_var_value(data->env, "?"));
 	free_data(data, true);
 	free(data);
-	return (last_exit);
+	return (status);
 }
