@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:41 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 19:06:45 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:46:53 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ static void	update_wds(t_data *data, char *wd)
 
 static	bool	chdir_errno_mod(char *path)
 {
-	if (errno == ESTALE)
-		errno = ENOENT;
 	errcmd_msg("cd", path, strerror(errno), EXIT_FAILURE);
 	return (false);
 }

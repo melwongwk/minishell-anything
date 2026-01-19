@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 22:49:42 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 19:49:57 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:46:10 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_command	*cmd_new(void)
 	cmd->io_fds->fd_out = -1;
 	cmd->io_fds->stdin_backup = -1;
 	cmd->io_fds->stdout_backup = -1;
-	cmd->io_fds->heredoc_fd = -1;
 	cmd->pipe_fd[0] = -1;
 	cmd->pipe_fd[1] = -1;
 	cmd->pipe_output = false;

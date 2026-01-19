@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/17 13:51:46 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:46:33 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_io_fds
 	char	*heredoc_delimiter;
 	bool	heredoc_quotes;
 	bool	redir_error;
-	int		heredoc_fd;
 	int		fd_in;
 	int		fd_out;
 	int		stdin_backup;
