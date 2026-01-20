@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:03:31 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/19 17:46:33 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/20 14:59:18 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_token
 	char			*str;
 	char			*str_backup;
 	bool			var_exists;
+	bool			is_assign;
 	int				type;
 	int				status;
 	bool			join;

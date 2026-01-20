@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 10:38:09 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/18 10:39:04 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/20 15:48:31 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ t_token	*parse_token(char *input, int *i)
 {
 	int		status;
 	bool	is_var;
+	int		is_asgn;
 	char	*seg;
 	t_token	*new;
 
+	is_asgn = 0;
+	if (*i > 0 && input[*i - 1] == '=')
+		is_asgn = 1;
 	seg = extract_segment(input, i, &status, &is_var);
 	if (!seg)
 		return (NULL);
@@ -48,6 +52,7 @@ t_token	*parse_token(char *input, int *i)
 		else
 			new = token_new(seg, WORD, status);
 		free(seg);
+		new->is_assign = is_asgn;
 		return (new);
 	}
 	free(seg);

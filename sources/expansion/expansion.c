@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 07:13:45 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/16 19:40:52 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/20 15:40:14 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	post_expand_cleanup(t_token **tokens, t_token *t, int orig_status)
 		return (1);
 	}
 	if (orig_status == DEFAULT && t->type == WORD
-		&& has_whitespace(t->str))
+		&& has_whitespace(t->str) && !t->is_assign)
 		split_token_on_whitespace(t);
 	return (0);
 }
