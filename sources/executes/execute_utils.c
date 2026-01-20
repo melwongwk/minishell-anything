@@ -27,7 +27,7 @@ int	check_command_found(t_command *cmd)
 		return (errcmd_msg(cmd->command, NULL, strerror(errno), CMD_NOT_FOUND));
 	else if (cmd_is_dir(cmd->command))
 		return (errcmd_msg(cmd->command,
-				NULL, "is a directory", CMD_NOT_EXECUTABLE));
+				NULL, "Is a directory", CMD_NOT_EXECUTABLE));
 	else if (access(cmd->command, X_OK) != 0)
 		return (errcmd_msg(cmd->command,
 				NULL, strerror(errno), CMD_NOT_EXECUTABLE));
