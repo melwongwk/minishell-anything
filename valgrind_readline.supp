@@ -1,0 +1,34 @@
+{
+   readline-still-reachable
+   Memcheck:Leak
+   fun:readline
+   fun:rl_initialize
+   fun:rl_set_prompt
+   fun:rl_expand_prompt
+   fun:rl_redisplay
+   fun:add_history
+   fun:rl_add_funmap_entry
+   obj:/usr/lib/*/libreadline.so*
+   obj:/lib/*/libreadline.so*
+}
+
+{
+   libtinfo-still-reachable
+   Memcheck:Leak
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:_nc_first_db
+   fun:_nc_setupterm
+   fun:_nc_read_entry2
+   fun:_nc_read_termtype
+   fun:_nc_doalloc
+   obj:/usr/lib/*/libtinfo*
+   obj:/lib/*/libtinfo*
+}
+
+{
+   ncurses-still-reachable
+   Memcheck:Leak
+   obj:/usr/lib/*/libncurses*
+   obj:/lib/*/libncurses*
+}

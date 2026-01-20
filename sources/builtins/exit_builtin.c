@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/20 17:33:02 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/20 18:41:04 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static int	get_exit_code(t_data *data, char *arg, bool *error)
 	char	*exit_str;
 	int		code;
 
+	if (error)
+		*error = false;
 	if (!arg)
 	{
 		exit_str = get_env_var_value(data->env, "?");
@@ -64,21 +66,27 @@ int	is_quiet_mode(t_data *data)
 	return (0);
 }
 
+static void	exit_builtin_helper(t_data *data, int *exit_code)
+{
+	if (get_env_var_value(data->env, "?"))
+		*exit_code = ft_atoi(get_env_var_value(data->env, "?"));
+	else
+		*exit_code = 0;
+}
+
 int	exit_builtin(t_data *data, char **args)
 {
 	int		exit_code;
 	int		quiet;
 	bool	error;
 
+	error = false;
 	quiet = is_quiet_mode(data);
 	if (!quiet)
 		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args || !args[1])
 	{
-		if (get_env_var_value(data->env, "?"))
-			exit_code = ft_atoi(get_env_var_value(data->env, "?"));
-		else
-			exit_code = 0;
+		exit_builtin_helper(data, &exit_code);
 	}
 	else
 	{
