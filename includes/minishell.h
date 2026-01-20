@@ -34,7 +34,6 @@ typedef struct s_token
 {
 	char			*str;
 	char			*str_backup;
-	bool			var_exists;
 	bool			is_assign;
 	int				type;
 	int				status;

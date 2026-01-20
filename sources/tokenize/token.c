@@ -28,7 +28,6 @@ static void	set_token_strings(t_token *t, const char *s)
 
 static void	init_token_fields(t_token *t, int type, int status)
 {
-	t->var_exists = false;
 	t->type = type;
 	t->status = status;
 	t->join = false;

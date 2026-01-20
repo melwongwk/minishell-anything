@@ -72,7 +72,7 @@ int	exit_builtin(t_data *data, char **args)
 
 	quiet = is_quiet_mode(data);
 	if (!quiet)
-		ft_putendl_fd("exit", STDERR_FILENO);
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args || !args[1])
 	{
 		if (get_env_var_value(data->env, "?"))
