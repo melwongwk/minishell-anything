@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:03:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 18:29:03 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/20 17:56:28 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	exit_shell(t_data *data, int exit_code)
 		if (data->cmd && data->cmd->io_fds)
 			close_fds(data->cmd, true);
 		free_data(data, true);
+		free(data);
 	}
 	exit(exit_code);
 }

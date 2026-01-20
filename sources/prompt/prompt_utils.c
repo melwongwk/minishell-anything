@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: melwong <melwong@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 23:04:01 by melwong           #+#    #+#             */
-/*   Updated: 2026/01/17 23:04:01 by melwong          ###   ########.fr       */
+/*   Updated: 2026/01/20 17:59:01 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ t_data	*init_prompt_data(char **envp)
 	if (!data)
 		return (NULL);
 	data->env = dup_envp(envp);
-	data->interactive = true;
 	data->heredoc_interrupted = false;
 	set_env_var(data, "?", "0");
 	return (data);

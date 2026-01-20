@@ -6,7 +6,7 @@
 /*   By: hho-jia- <hho-jia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:05:31 by hho-jia-          #+#    #+#             */
-/*   Updated: 2026/01/15 19:11:23 by hho-jia-         ###   ########.fr       */
+/*   Updated: 2026/01/20 17:33:02 by hho-jia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	exit_builtin(t_data *data, char **args)
 	bool	error;
 
 	quiet = is_quiet_mode(data);
-	if (!quiet || data->interactive)
+	if (!quiet)
 		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!args || !args[1])
 	{
